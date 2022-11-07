@@ -26,8 +26,8 @@ type BlockGroupProps = {
 
 const StyledBlockGroup = styled.div`
   position: absolute;
-  left: ${(props: StyledBlockGroupProps) => `${props.x}rem`};
-  top: ${(props: StyledBlockGroupProps) => `${props.y}rem`};
+  left: ${(props: StyledBlockGroupProps) => `${props.x - props.center.xOffset}rem`};
+  top: ${(props: StyledBlockGroupProps) => `${props.y - props.center.yOffset * 2}rem`};
   transform-origin: ${ props => `${props.center.xOffset}rem ${props.center.yOffset}rem` };
   transform: ${(props: StyledBlockGroupProps) => `rotate(${props.angle * 90}deg)`};
 `;
@@ -51,11 +51,12 @@ export const BlockGroup = ({
   x,
   y,
   angle,
-  shape = "T",
+  shape,
 }: BlockGroupProps) => {
+
   const config = ShapeConfig[shape];
   const { blocks, center } = config;
- 
+
   return (
     <StyledBlockGroup x={x} y={y} center={center} angle={angle}>
       {blocks.map((block, index) => (
@@ -71,6 +72,7 @@ const mapStateToProps = (state) => {
     x: state.keyboard.x,
     y: state.keyboard.y,
     angle: state.keyboard.angle,
+    shape: state.keyboard.shape,
   };
 };
 

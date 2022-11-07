@@ -1,17 +1,25 @@
 import { keyboard } from "../../actions/index"
 import produce from "immer"
+import { genetateShape, ShapeConfig } from "../../components/ShapeConfig";
+import { Mesh as MeshConfig } from "../../config";
 
 
 const { ArrowDown, ArrowLeft, ArrowRight, ArrowUp } = keyboard;
 
 
+
 const initialState = {
-  x: 10,
-  y: 10,
+  x: Math.floor(MeshConfig.width / 2),
+  y: 0,
   angle: 0,
+  shape: genetateShape(),
+  // shape: "L"
 }
 
+
+
 export const keyBoardReducer = (state = initialState, action: { type: any; }) => {
+
   switch (action.type) {
     case ArrowDown:
       return produce(state, draft => {

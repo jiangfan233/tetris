@@ -1,6 +1,7 @@
 import {createStore} from "redux"
-import {KeyBoardReducer } from "../reducers/index"
+import {RootReducer } from "../reducers/index"
 
 
 
-export const store = createStore(KeyBoardReducer)
+
+export const store = createStore(RootReducer)
