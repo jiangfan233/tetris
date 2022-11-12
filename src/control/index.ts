@@ -2,34 +2,45 @@
 import { keyboard } from "../actions/index";
 import { ShapeConfig, ShapeType } from "../components/ShapeConfig";
 import { store } from "../store";
-import { scanBottom } from "../utils";
+import { scanBottom, scanLeft, scanRight } from "../utils";
+
 
 const keyDownHandler = (e: { code: string; }) => {
   const state = store.getState();
   const { keyboard: pos, mesh } = state;
-  const blocks = ShapeConfig[pos.shape as ShapeType].blocks;
-  console.log(pos)
-  // console.log(e);
+  const shape = ShapeConfig[pos.shape as ShapeType];
+  
   switch (e.code) {
     case keyboard.ArrowDown:
       // 如果方块下面有物体（方块、底部）
-      if(scanBottom({ x: pos.x, y: pos.y }, mesh!, blocks)) {
-        console.log("到底啦！")
+      if(scanBottom({ x: pos.x, y: pos.y }, mesh!, shape)) {
+        console.log("到底啦！", pos)
+        // 分配新的方块组
+        // 检测是否需要消除
       } else {
-        store.dispatch(keyboard.moveDown());
+        store.dispatch(keyboard.moveDown(pos));
       }
       return;
     case keyboard.ArrowLeft:
-      store.dispatch(keyboard.moveLeft());
+      if(scanLeft({ x: pos.x, y: pos.y }, mesh!, shape)) {
+        console.log("到最左侧了")
+      } else {
+        store.dispatch(keyboard.moveLeft(pos));
+      }
       return;
     case keyboard.ArrowRight:
-      store.dispatch(keyboard.moveRight());
+      if(scanRight({ x: pos.x, y: pos.y }, mesh!, shape)) {
+        console.log("到最右侧了")
+      } else {
+        store.dispatch(keyboard.moveRight(pos));
+      }
       return;
     case keyboard.ArrowUp:
-      store.dispatch(keyboard.rotate());
+      // 不同的形状需要有不同的旋转补正（保持方块的坐标始终是整数）
+      store.dispatch(keyboard.rotate(pos));
       return;
     case keyboard.Space:
-      store.dispatch(keyboard.drop());
+      store.dispatch(keyboard.drop(pos));
       return;
     default:
       return;
