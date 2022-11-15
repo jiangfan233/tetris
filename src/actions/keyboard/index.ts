@@ -1,4 +1,5 @@
-import { BlockGroupPosition } from "../../reducers/keyboard";
+
+import { ShapeProperties } from "../../components/ShapeConfig";
 
 // action types
 export const ArrowRight = "ArrowRight";
@@ -6,6 +7,12 @@ export const ArrowLeft = "ArrowLeft";
 export const ArrowUp = "ArrowUp";
 export const ArrowDown = "ArrowDown";
 export const Space = "Space";
+
+export type Direction =
+  | typeof ArrowRight
+  | typeof ArrowLeft
+  | typeof ArrowUp
+  | typeof ArrowDown;
 
 export type KeyboardAction = {
   type:
@@ -15,63 +22,73 @@ export type KeyboardAction = {
     | typeof ArrowDown
     | typeof Space;
 
-  data?: {
-    fixX: number;
-    fixY: number;
+  data: {
+    width: number;
+    height: number;
   };
 };
 
 export type KeyboardActionCreator = (
-  pos?: BlockGroupPosition
+  shapeProperties: ShapeProperties
 ) => KeyboardAction;
 
 // action creators
-export const moveRight: KeyboardActionCreator = () => {
+export const moveRight: KeyboardActionCreator = (
+  shapeProperties: ShapeProperties
+) => {
   return {
     type: ArrowRight,
+    data: {
+      width: shapeProperties.width!,
+      height: shapeProperties.height!
+    }
   };
 };
 
-export const moveLeft: KeyboardActionCreator = () => {
+export const moveLeft: KeyboardActionCreator = (
+  shapeProperties: ShapeProperties
+) => {
   return {
     type: ArrowLeft,
+    data: {
+      width: shapeProperties.width!,
+      height: shapeProperties.height!
+    }
   };
 };
 
-export const moveDown: KeyboardActionCreator = () => {
+export const moveDown: KeyboardActionCreator = (
+  shapeProperties: ShapeProperties
+) => {
   return {
     type: ArrowDown,
+    data: {
+      width: shapeProperties.width!,
+      height: shapeProperties.height!
+    }
   };
 };
 
 export const rotate: KeyboardActionCreator = (
-  pos: BlockGroupPosition | undefined
+  shapeProperties: ShapeProperties
 ) => {
-  let fixY = 0;
-  let fixX = 0;
-
-  // switch(pos?.angle) {
-  //   case 0: 
-  //     fixY = 0.5;
-  //     break;
-  //   case 2: 
-  //     fixY = 0.5;
-  //     break;
-  //   default:
-  //     fixY = 0;
-  // }
-
   return {
     type: ArrowUp,
     data: {
-      fixY,
-      fixX,
-    },
+      width: shapeProperties.width!,
+      height: shapeProperties.height!
+    }
   };
 };
 
-export const drop: KeyboardActionCreator = () => {
+export const drop: KeyboardActionCreator = (
+  shapeProperties: ShapeProperties
+) => {
   return {
     type: Space,
+    data: {
+      width: shapeProperties.width!,
+      height: shapeProperties.height!
+    }
   };
 };

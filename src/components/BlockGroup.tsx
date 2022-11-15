@@ -28,7 +28,8 @@ const StyledBlockGroup = styled.div`
   position: absolute;
   left: ${(props: StyledBlockGroupProps) => `${props.x}rem`};
   top: ${(props: StyledBlockGroupProps) => `${props.y}rem`};
-  transform-origin: ${ props => `${props.center.xOffset}rem ${props.center.yOffset}rem` };
+  /* transform-origin: ${ props => `${props.center.xOffset}rem ${props.center.yOffset}rem` }; */
+  transform-origin: 0 0;
   transform: ${(props: StyledBlockGroupProps) => `rotate(${props.angle * 90}deg)`};
 `;
 

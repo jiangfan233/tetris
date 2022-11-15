@@ -3,6 +3,7 @@ import produce from "immer"
 import { genetateShape, ShapeConfig, ShapeType } from "../../components/ShapeConfig";
 import { Mesh as MeshConfig } from "../../config";
 import { KeyboardAction } from "../../actions/keyboard";
+import { isDecimal } from "../../utils";
 
 
 const { ArrowDown, ArrowLeft, ArrowRight, ArrowUp } = keyboard;
@@ -19,11 +20,23 @@ export type BlockGroupPosition = {
 type GetPosition = () => BlockGroupPosition;
 
 const initPosition: GetPosition = () => {
-  const shapeType: ShapeType = genetateShape();
-  // const shapeType = "J";
+  // const shapeType: ShapeType = genetateShape();
+  const shapeType = "I";
   const { height, width, center } = ShapeConfig[shapeType as ShapeType];
+
+  let x = MeshConfig.width / 2;
+  switch(shapeType) {
+    case "I":
+      break;
+
+    case "T":
+      break;
+
+    default:
+      x = Math.round(x)
+  }
   return {
-    x: Math.floor(MeshConfig.width / 2),
+    x: x,
     // x: 0,
     y: 0 - center!.yOffset,
     angle: 0,
@@ -32,46 +45,50 @@ const initPosition: GetPosition = () => {
 }
 
 
-
 export const keyBoardReducer = (state = initPosition(), action: KeyboardAction) => {
+
+  const { x, y, angle, shape } = state;
+  
+  let fixX = 0;
+  let fixY = 0;
+
+  if(action && action.data) {
+    const { width, height } = action.data;
+
+    switch(angle % 2) {
+      case 0:
+        fixX = isDecimal(width / 2 + x) ? 0.5 : 0;
+        fixY = isDecimal(height / 2 + y) ? 0.5 : 0;
+        break;
+
+      default:
+        fixX = isDecimal(height / 2 + x) ? 0.5 : 0;
+        fixY = isDecimal(width / 2 + y) ? 0.5 : 0;
+    }
+    
+  }
+
 
   switch (action.type) {
     case ArrowDown:
       return produce(state, draft => {
-        if(Number(draft.y) !== Math.round(draft.y)) {
-          draft.y += 1.5;
-        } else {
-          draft.y += 1;
-        }
+        draft.y += 1 + fixY;
       })
     case ArrowLeft:
       return produce(state, draft => {
-        draft.x -= 1
+        draft.x -= (1 + fixX);
       })
     case ArrowRight:
       return produce(state, draft => {
-        draft.x += 1
+        draft.x += (1 + fixX);
+        
       })
     case ArrowUp:
       return produce(state, draft => {
-        
-        // const shape = ShapeConfig[draft.shape];
-        // console.log(shape)
-        // const centerX = draft.x + shape.center!.xOffset;
-        // const centerY = draft.y + shape.center!.yOffset;
-
-        // console.log(draft.x, draft.y, centerX, centerY, shape.height, shape.width)
-
-
         draft.angle = (draft.angle + 1) % 4;
-        // draft.y = draft.angle % 2 ? centerY - shape.width! / 2 : draft.y;
-        // draft.x = draft.angle % 2 ? centerX - shape.height! / 2 : draft.x;
-        // draft.x = -0.5
         
-
       })
     default:
-      // console.log("rotate")
       return state;
   }
 }
