@@ -1,6 +1,7 @@
-import { useEffect, useRef } from "react"
+
 import styled from "styled-components"
 import { Mesh as MeshConfig } from "../config"
+import { MeshBlocksWrapper } from "./MeshBlocks"
 
 const StyledContainer = styled.div`
   box-sizing: content-box;
@@ -14,12 +15,11 @@ const StyledContainer = styled.div`
 
 
 export const Container = ({ children } : {children: JSX.Element}) => {
-  const ref = useRef(null)
 
   return (
-    <StyledContainer ref={ref}>
+    <StyledContainer>
       { children }
-
+      <MeshBlocksWrapper />
     </StyledContainer>
   )
 }

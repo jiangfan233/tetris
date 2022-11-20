@@ -1,6 +1,5 @@
 import styled from "styled-components";
 import { connect } from "react-redux";
-import React from "react";
 
 type styledBlockProps = {
   x: number;
@@ -12,22 +11,22 @@ const StyledBlock = styled.div`
   height: 1rem;
   width: 1rem;
   position: absolute;
-  /* background-color: #52473d; */
-  background-image: linear-gradient(red, white);
-  border: 2px solid #0e0b08;
+  background-color: #f8f6f67e;
+  /* background-image: linear-gradient(red, white); */
+  border: 1px solid #0e0b08;
   left: ${(props: styledBlockProps) => `${props.x}rem`};
   top: ${(props: styledBlockProps) => `${props.y}rem`};
   transform: ${(props: styledBlockProps) => `rotate(${props.angle}deg)`};
 `;
 
 type BlockProps = {
-  dispatch: Function;
+  dispatch?: Function;
   x: number;
   y: number;
-  angle: number;
+  angle?: number;
 };
 
-export const Block = ({ dispatch, x, y, angle }: BlockProps) => {
+export const Block = ({ dispatch, x, y, angle=0 }: BlockProps) => {
 
   return <StyledBlock x={x} y={y} angle={angle * 90}></StyledBlock>;
 };

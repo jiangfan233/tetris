@@ -9,9 +9,19 @@ import {
   moveDown,
   rotate,
   drop,
+  Reset,
+  reset,
 } from "./keyboard";
-
-
+import {
+  OCCUPY,
+  LIBERATE,
+  BATCH_LIBERATE,
+  BATCH_OCCUPY,
+  occupy,
+  batchOccupy,
+  liberate,
+  batchLiberate,
+} from "./Mesh";
 
 export const keyboard = {
   ArrowRight,
@@ -24,4 +34,17 @@ export const keyboard = {
   rotate,
   Space,
   drop,
+  Reset,
+  reset,
 };
+
+export const mesh = {
+  OCCUPY,
+  LIBERATE,
+  BATCH_LIBERATE,
+  BATCH_OCCUPY,
+  occupy,
+  batchOccupy,
+  liberate,
+  batchLiberate,
+}

@@ -1,8 +1,12 @@
-import { keyboard } from "../actions/index";
+import { keyboard, mesh as meshActions } from "../actions/index";
 import { Direction } from "../actions/keyboard";
 import { ShapeConfig, ShapeType } from "../components/ShapeConfig";
 import { store } from "../store";
-import { scanBottom, scanLeft, scanRight, scan } from "../utils";
+import { scan } from "../utils/scan";
+import {getPoints} from "../utils/index"
+
+
+let timer: number | null = null;
 
 const keyDownHandler = (e: { code: string }) => {
   const state = store.getState();
@@ -13,9 +17,17 @@ const keyDownHandler = (e: { code: string }) => {
     case keyboard.ArrowDown:
       // 如果方块下面有物体（方块、底部）
       if (scan(pos, shapeProperties, mesh!, keyboard.ArrowDown as Direction)) {
-        console.log("到底啦！");
         // 分配新的方块组 或者 重置位置
         // 检测是否需要消除
+        if(!timer) {
+          timer = setTimeout(() => {
+            console.log("到底啦！");
+            store.dispatch(keyboard.reset(shapeProperties));
+            store.dispatch(meshActions.batchOccupy(getPoints(pos, shapeProperties)))
+            clearTimeout(timer as number);
+            timer = null;
+          }, 1000);
+        }
       } else {
         store.dispatch(keyboard.moveDown(shapeProperties));
       }

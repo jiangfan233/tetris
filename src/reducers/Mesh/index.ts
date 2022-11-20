@@ -27,21 +27,19 @@ export const MeshReducer = (state:MeshState = initialState, action: PointAction)
   switch (action.type) {
     // 批量占据多个点
     case BATCH_OCCUPY:
-      produce(state, (draft:MeshState) => {
+      return produce(state, (draft:MeshState) => {
         action.points.forEach(point => {
           draft.points[point.x][point.y] = 1
         })
       })
-      return ;
 
     // 批量解放多个点
     case BATCH_LIBERATE:
-      produce(state, (draft:MeshState) => {
+      return produce(state, (draft:MeshState) => {
         action.points.forEach(point => {
           draft.points[point.x][point.y] = 0
         })
       })
-      return;
 
     default:
       return state;

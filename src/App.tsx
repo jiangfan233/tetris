@@ -1,4 +1,3 @@
-import { useRef } from "react";
 import styled from "styled-components";
 import GlobalBlock from "./components/block";
 import GlobalBlockGroup from "./components/BlockGroup";

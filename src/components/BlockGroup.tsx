@@ -37,13 +37,14 @@ const StyledBlock = styled.div`
   height: 1rem;
   width: 1rem;
   position: absolute;
+  z-index: 10;
   background-color: #52473d;
   border: 2px solid #0e0b08;
   left: ${(props: StyledBlockProps) => `${props.xOffset}rem`};
   top: ${(props: StyledBlockProps) => `${props.yOffset}rem`};
 `;
 
-const Block = ({ xOffset, yOffset }: BlockProps) => {
+export const Block = ({ xOffset, yOffset }: BlockProps) => {
   return <StyledBlock xOffset={xOffset} yOffset={yOffset}></StyledBlock>;
 };
 

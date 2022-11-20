@@ -7,6 +7,7 @@ export const ArrowLeft = "ArrowLeft";
 export const ArrowUp = "ArrowUp";
 export const ArrowDown = "ArrowDown";
 export const Space = "Space";
+export const Reset = "Reset";
 
 export type Direction =
   | typeof ArrowRight
@@ -20,7 +21,8 @@ export type KeyboardAction = {
     | typeof ArrowLeft
     | typeof ArrowUp
     | typeof ArrowDown
-    | typeof Space;
+    | typeof Space
+    | typeof Reset
 
   data: {
     width: number;
@@ -92,3 +94,13 @@ export const drop: KeyboardActionCreator = (
     }
   };
 };
+
+export const reset :KeyboardActionCreator = (shapeProperties: ShapeProperties) => {
+  return {
+    type: Reset,
+    data: {
+      width: shapeProperties.width!,
+      height: shapeProperties.height!
+    }
+  };
+}

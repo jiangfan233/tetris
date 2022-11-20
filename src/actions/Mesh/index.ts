@@ -12,41 +12,48 @@ export const BATCH_OCCUPY = "BATCH_OCCUPY";
 export const BATCH_LIBERATE = "BATCH_LIBERATE";
 
 
+export type PointActionType = typeof OCCUPY | typeof LIBERATE | typeof BATCH_OCCUPY | typeof BATCH_LIBERATE;
+
 export type Point = {
   x: number;
   y: number;
 }
 
 export interface PointAction {
-  type: typeof OCCUPY | typeof LIBERATE | typeof BATCH_OCCUPY | typeof BATCH_LIBERATE;
+  type: PointActionType;
+  points: Point[];
+}
+
+export type PointActionCreator = (points: Point[]) => {
+  type: PointActionType;
   points: Point[];
 }
 
 // action creators
 export const occupy = (point: Point) => {
   return {
-    type: OCCUPY,
+    type: OCCUPY as PointActionType,
     payload: point,
   }
 }
 
 export const liberate = (point: Point) => {
   return {
-    type: LIBERATE,
+    type: LIBERATE as PointActionType,
     payload: point,
   }
 }
 
-export const batchOccupy = (points: Point[]) => {
+export const batchOccupy: PointActionCreator = (points: Point[]) => {
   return {
-    type: BATCH_OCCUPY,
-    payload: points,
+    type: BATCH_OCCUPY as PointActionType,
+    points: points,
   }
 }
 
-export const batchLiberate = (points: Point[]) => {
+export const batchLiberate: PointActionCreator = (points: Point[]) => {
   return {
-    type: BATCH_LIBERATE,
-    payload: points,
+    type: BATCH_LIBERATE as PointActionType,
+    points: points,
   }
 }
