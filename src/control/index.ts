@@ -77,6 +77,6 @@ document.addEventListener("keyup", (e) => {
     lock = false;
   }
 });
-// setInterval(() => {
-//   keyDownHandler({ code: "ArrowDown" });
-// }, 1000)
+setInterval(() => {
+  keyDownHandler({ code: "ArrowDown" });
+}, 1000)
