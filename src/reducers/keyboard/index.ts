@@ -8,9 +8,9 @@ import {
 import { Mesh as MeshConfig } from "../../config";
 import { KeyboardAction } from "../../actions/keyboard";
 import { isDecimal } from "../../utils/scan";
-import { WritableDraft } from "immer/dist/internal";
 
-const { ArrowDown, ArrowLeft, ArrowRight, ArrowUp, Reset } = keyboard;
+
+const { ArrowDown, ArrowLeft, ArrowRight, ArrowUp, Reset, drop, Space } = keyboard;
 
 export type BlockGroupPosition = {
   x: number;
@@ -22,8 +22,8 @@ export type BlockGroupPosition = {
 type InitPosition = () => BlockGroupPosition;
 
 const initPosition: InitPosition = () => {
-  const shapeType: ShapeType = genetateShape();
-  // const shapeType = "I";
+  // const shapeType: ShapeType = genetateShape();
+  const shapeType = "L";
   const { height, width, center } = ShapeConfig[shapeType as ShapeType];
 
   let x = MeshConfig.width / 2;
@@ -71,6 +71,11 @@ export const keyBoardReducer = (
   }
 
   switch (action.type) {
+    case Space:
+      return produce(state, (draft) => {
+        draft.y += 1 + fixY;
+        draft.x -= fixX;
+      });
     case ArrowDown:
       return produce(state, (draft) => {
         draft.y += 1 + fixY;

@@ -3,10 +3,8 @@ import { Direction } from "../actions/keyboard";
 import { ShapeConfig, ShapeType } from "../components/ShapeConfig";
 import { store } from "../store";
 import { scan } from "../utils/scan";
-import {getPoints} from "../utils/index"
+import { getPoints } from "../utils/index";
 
-
-let timer: number | null = null;
 
 const keyDownHandler = (e: { code: string }) => {
   const state = store.getState();
@@ -17,17 +15,15 @@ const keyDownHandler = (e: { code: string }) => {
     case keyboard.ArrowDown:
       // 如果方块下面有物体（方块、底部）
       if (scan(pos, shapeProperties, mesh!, keyboard.ArrowDown as Direction)) {
+        drop = false;
         // 分配新的方块组 或者 重置位置
         // 检测是否需要消除
-        if(!timer) {
-          timer = setTimeout(() => {
-            console.log("到底啦！");
-            store.dispatch(keyboard.reset(shapeProperties));
-            store.dispatch(meshActions.batchOccupy(getPoints(pos, shapeProperties)))
-            clearTimeout(timer as number);
-            timer = null;
-          }, 1000);
-        }
+
+        console.log("到底啦！");
+        store.dispatch(keyboard.reset(shapeProperties));
+        store.dispatch(
+          meshActions.batchOccupy(getPoints(pos, shapeProperties))
+        );
       } else {
         store.dispatch(keyboard.moveDown(shapeProperties));
       }
@@ -57,21 +53,30 @@ const keyDownHandler = (e: { code: string }) => {
       } else {
         store.dispatch(keyboard.rotate(shapeProperties));
       }
-    case keyboard.Space:
-      store.dispatch(keyboard.drop(shapeProperties));
-      return;
+      // store.dispatch(keyboard.rotate(shapeProperties));
     default:
       return;
   }
 };
 
 let lock = false;
+let drop = false;
 document.addEventListener("keydown", (e) => {
-  lock = true;
-  keyDownHandler(e);
+  if (e.code === "Space") {
+    drop = true;
+    while (drop) {
+      keyDownHandler({ code: "ArrowDown" });
+    }
+  } else {
+    lock = true;
+    keyDownHandler(e);
+  }
 });
 document.addEventListener("keyup", (e) => {
   if (lock) {
     lock = false;
   }
 });
+// setInterval(() => {
+//   keyDownHandler({ code: "ArrowDown" });
+// }, 1000)

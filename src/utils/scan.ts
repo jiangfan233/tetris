@@ -21,15 +21,14 @@ export type ScanFnCfg = {
     | typeof isTop;
 };
 
-type GenerateScanCfg = (pos: BlockGroupPosition) => ScanFnCfg;
-
 // 不同角度不同方向的检测方法
 // angle bottom    left       top       right
 // 0     isBottom  isLeft     isTop     isRight
 // 1     isRight   isBottom   isleft    isTop
 // 2     isTop     isRight    isBottom  isLeft
 // 3     isLeft    isTop      isRight   isBottom
-const generateScanCfg: GenerateScanCfg = (pos: BlockGroupPosition) => {
+type GenerateScanCfg = (angle: number) => ScanFnCfg;
+const generateScanCfg: GenerateScanCfg = (angle: number) => {
   const arr = [isBottom, isLeft, isTop, isRight];
   const dirs = [ArrowDown, ArrowLeft, ArrowUp, ArrowRight];
 
@@ -41,8 +40,8 @@ const generateScanCfg: GenerateScanCfg = (pos: BlockGroupPosition) => {
   };
 
   return arr
-    .slice(arr.length - pos.angle)
-    .concat(arr.slice(0, arr.length - pos.angle))
+    .slice(arr.length - angle)
+    .concat(arr.slice(0, arr.length - angle))
     .reduce(
       (cfg, fn, index) => ({ ...cfg, [dirs[index] as Direction]: fn }),
       cfg
@@ -54,194 +53,232 @@ export const scan = (
   shape: ShapeProperties,
   mesh: MeshState,
   direction: Direction
-) => {
-  const scanFnCfg = generateScanCfg(pos);
-  const scanFn = scanFnCfg[direction];
+): boolean => {
+  const scanFn = generateScanCfg(pos.angle)[direction];
+  return scanFn(shape.blocks, pos, direction, mesh);
+};
 
-  // 偏移量
-  const target = { xOffset: 0, yOffset: 0 };
+/**
+ * 这里的四个监测函数应该有更好地实现方式
+ */
+
+const isBottom = (
+  blocks: Shape[],
+  pos: BlockGroupPosition,
+  direction: Direction,
+  mesh: MeshState
+): boolean => {
   switch (direction) {
+    // angle = 0
     case ArrowDown:
-      target.yOffset = 1;
-      break;
+      return !blocks.every((block) => {
+        const newY = Math.floor(block.yOffset + pos.y + 1);
+        const newX = pos.x + block.xOffset;
+
+        if (
+          newX < 0 ||
+          newX >= Mesh.width ||
+          newY >= Mesh.height ||
+          mesh.points[newX][newY]
+        )
+          return false;
+        return true;
+      });
+
+    // angle = 1
     case ArrowLeft:
-      target.xOffset = -1;
-      break;
+      return !blocks.every((block) => {
+        const newX = Math.floor(pos.x - block.yOffset - 2);
+        const newY = Math.floor(pos.y + block.xOffset);
+        if (
+          newX < 0 ||
+          newX >= Mesh.width ||
+          newY >= Mesh.height ||
+          mesh.points[newX][newY]
+        )
+          return false;
+        return true;
+      });
+
+    // angle = 3
     case ArrowRight:
-      target.xOffset = 1;
-      break;
+      return !blocks.every((block) => {
+        const newX = Math.floor(pos.x + block.yOffset + 1);
+        const newY = Math.floor(pos.y - block.xOffset);
+        if (
+          newX < 0 ||
+          newX >= Mesh.width ||
+          newY >= Mesh.height ||
+          mesh.points[newX][newY]
+        )
+          return false;
+        return true;
+      });
   }
+  return true;
+};
 
-  const { blocks, height, width } = shape;
-
-  return !scanFn(blocks).every((block) => {
-    switch (direction) {
-      case ArrowDown:
-        const targetY = Math.ceil(
-          pos.y +
-            (pos.angle % 2 ? width! / 2 : height! / 2) +
-            target.yOffset
-        );
-        if (targetY > Mesh.height) return false;
-        return !mesh.points[Math.floor(pos.x + block.xOffset)][targetY-1];
-
-      case ArrowLeft:
-        const targetLeftX = Math.floor(
-          pos.x - (pos.angle % 2 ? height! / 2 : width! / 2) + target.xOffset
-        );
-        const targetLeftY = Math.floor(
-          pos.y + (pos.angle % 2 ? block.xOffset :block.yOffset)
+const isTop = (
+  blocks: Shape[],
+  pos: BlockGroupPosition,
+  direction: Direction,
+  mesh: MeshState
+) => {
+  switch (direction) {
+    // angle = 2
+    case ArrowDown:
+      return !blocks.every((block) => {
+        const newY = Math.floor(pos.y - block.yOffset);
+        const newX = Math.floor(pos.x - block.xOffset - 1);
+        if (
+          newX < 0 ||
+          newX >= Mesh.width ||
+          newY >= Mesh.height ||
+          mesh.points[newX][newY]
         )
-        if (targetLeftX < 0) return false;
-        return !mesh.points[targetLeftX][targetLeftY];
+          return false;
+        return true;
+      });
 
-      default:
-        const targetRightX = Math.ceil(
-          pos.x + (pos.angle % 2 ? height! / 2 : width! / 2)
-        );
-        const targetRightY = Math.floor(
-          pos.y + (pos.angle % 2 ? block.xOffset :block.yOffset)
+    // angle = 3
+    case ArrowLeft:
+      return !blocks.every((block) => {
+        const newX = Math.floor(pos.x + block.yOffset - 1);
+        const newY = Math.floor(pos.y - block.xOffset - 1);
+        if (
+          newX < 0 ||
+          newX >= Mesh.width ||
+          newY >= Mesh.height ||
+          mesh.points[newX][newY]
         )
-        if (targetRightX >= Mesh.width) return false;
-        return !mesh.points[targetRightX][targetRightY];
-    }
-  });
+          return false;
+        return true;
+      });
+
+    // angle = 1
+    case ArrowRight:
+      return !blocks.every((block) => {
+        const newX = Math.floor(pos.x - block.yOffset);
+        const newY = Math.floor(pos.y + block.xOffset);
+        if (
+          newX < 0 ||
+          newX >= Mesh.width ||
+          newY >= Mesh.height ||
+          mesh.points[newX][newY]
+        )
+          return false;
+        return true;
+      });
+  }
+  return true;
 };
 
-const isBottom = (blocks: Shape[]) => {
-  let obj: { [key: string]: number } = {};
+const isLeft = (
+  blocks: Shape[],
+  pos: BlockGroupPosition,
+  direction: Direction,
+  mesh: MeshState
+): boolean => {
+  switch (direction) {
+    // angle = 3
+    case ArrowDown:
+      return !blocks.every((block) => {
+        const newY = Math.floor(pos.y - block.xOffset);
+        const newX = Math.floor(pos.x + block.yOffset);
+        if (
+          newX < 0 ||
+          newX >= Mesh.width ||
+          newY >= Mesh.height ||
+          mesh.points[newX][newY]
+        )
+          return false;
+        return true;
+      });
 
-  obj = blocks.reduce((prev, block) => {
-    return {
-      ...prev,
-      [block.xOffset]: Math.max(
-        block.yOffset,
-        prev[block.xOffset] || Number.NEGATIVE_INFINITY
-      ),
-    };
-  }, obj);
+    // angle = 0
+    case ArrowLeft:
+      return !blocks.every((block) => {
+        const newX = Math.floor(pos.x + block.xOffset - 1);
+        const newY = Math.floor(pos.y + block.yOffset);
+        if (
+          newX < 0 ||
+          newX >= Mesh.width ||
+          newY >= Mesh.height ||
+          mesh.points[newX][newY]
+        )
+          return false;
+        return true;
+      });
 
-  return Object.entries(obj).map((item) => {
-    return {
-      xOffset: Number(item[0]),
-      yOffset: item[1],
-    };
-  });
+    // angle = 2
+    case ArrowRight:
+      return !blocks.every((block) => {
+        const newX = Math.floor(pos.x - block.yOffset);
+        const newY = Math.floor(pos.y - block.xOffset);
+        if (
+          newX < 0 ||
+          newX >= Mesh.width ||
+          newY >= Mesh.height ||
+          mesh.points[newX][newY]
+        )
+          return false;
+        return true;
+      });
+  }
+  return true;
 };
 
-const isTop = (blocks: Shape[]) => {
-  let obj: { [key: string]: number } = {};
+const isRight = (
+  blocks: Shape[],
+  pos: BlockGroupPosition,
+  direction: Direction,
+  mesh: MeshState
+): boolean => {
+  switch (direction) {
+    // angle = 1
+    case ArrowDown:
+      return !blocks.every((block) => {
+        const newY = Math.floor(pos.y + block.xOffset + 1);
+        const newX = Math.floor(pos.x - block.yOffset - 1);
+        if (
+          newX < 0 ||
+          newX >= Mesh.width ||
+          newY >= Mesh.height ||
+          mesh.points[newX][newY]
+        )
+          return false;
+        return true;
+      });
 
-  obj = blocks.reduce((prev, block) => {
-    return {
-      ...prev,
-      [block.xOffset]: Math.min(
-        block.yOffset,
-        prev[block.xOffset] || Number.POSITIVE_INFINITY
-      ),
-    };
-  }, obj);
+    // angle = 2
+    case ArrowLeft:
+      return !blocks.every((block) => {
+        const newX = Math.floor(pos.x - block.yOffset - 1);
+        const newY = Math.floor(pos.y - block.xOffset - 1);
+        if (
+          newX < 0 ||
+          newX >= Mesh.width ||
+          newY >= Mesh.height ||
+          mesh.points[newX][newY]
+        )
+          return false;
+        return true;
+      });
 
-  return Object.entries(obj).map((item) => {
-    return {
-      xOffset: Number(item[0]),
-      yOffset: item[1],
-    };
-  });
-};
-
-// 检测方块下方是否有物体
-// 如果方块发生旋转，需要更详细的判断逻辑
-export const scanBottom = (
-  pos: Point,
-  mesh: MeshState,
-  shape: ShapeProperties
-) => {
-  if (pos.y + 1 < 0) return false;
-
-  const { blocks, height } = shape;
-  if (pos.y + 1 + height! / 2 > Mesh.height) return true;
-  return !isBottom(blocks).every((block) => {
-    return !mesh.points[Math.floor(pos.x + block.xOffset)][
-      pos.y + 1 + block.yOffset
-    ];
-  });
-};
-
-const isLeft = (blocks: Shape[]) => {
-  let obj: { [key: string]: number } = {};
-
-  obj = blocks.reduce((prev, block) => {
-    return {
-      ...prev,
-      [block.yOffset]: Math.min(
-        block.xOffset,
-        prev[block.yOffset] || Number.POSITIVE_INFINITY
-      ),
-    };
-  }, obj);
-
-  return Object.entries(obj).map((item) => {
-    return {
-      yOffset: Number(item[0]),
-      xOffset: item[1],
-    };
-  });
-};
-
-// 检测方块左侧是否有物体
-// 如果方块发生旋转，需要更详细的判断逻辑
-export const scanLeft = (
-  pos: Point,
-  mesh: MeshState,
-  shape: ShapeProperties
-) => {
-  if (pos.x - 1 < 0) return true;
-
-  const { blocks } = shape;
-  return !isLeft(blocks).every((block) => {
-    if (pos.x + block.xOffset - 1 < 0) return false;
-    return !mesh.points[Math.floor(pos.x + block.xOffset - 1)][
-      pos.y + block.yOffset
-    ];
-  });
-};
-
-const isRight = (blocks: Shape[]) => {
-  let obj: { [key: string]: number } = {};
-
-  obj = blocks.reduce((prev, block) => {
-    return {
-      ...prev,
-      [block.yOffset]: Math.max(
-        block.xOffset,
-        prev[block.yOffset] || Number.NEGATIVE_INFINITY
-      ),
-    };
-  }, obj);
-
-  return Object.entries(obj).map((item) => {
-    return {
-      yOffset: Number(item[0]),
-      xOffset: item[1],
-    };
-  });
-};
-
-// 检测方块左侧是否有物体
-// 如果方块发生旋转，需要更详细的判断逻辑
-export const scanRight = (
-  pos: Point,
-  mesh: MeshState,
-  shape: ShapeProperties
-) => {
-  if (pos.x + 1 > Mesh.height) return true;
-
-  const { blocks } = shape;
-  return !isRight(blocks).every((block) => {
-    if (Math.floor(pos.x + block.xOffset + 1) >= Mesh.width) return false;
-    return !mesh.points[Math.floor(pos.x + block.xOffset + 1)][
-      pos.y + block.yOffset
-    ];
-  });
+    // angle = 0
+    case ArrowRight:
+      return !blocks.every((block) => {
+        const newX = Math.floor(pos.x + block.xOffset + 1);
+        const newY = Math.floor(pos.y + block.yOffset);
+        if (
+          newX < 0 ||
+          newX >= Mesh.width ||
+          newY >= Mesh.height ||
+          mesh.points[newX][newY]
+        )
+          return false;
+        return true;
+      });
+  }
+  return true;
 };
