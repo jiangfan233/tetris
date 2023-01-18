@@ -104,3 +104,18 @@ export const reset :KeyboardActionCreator = (shapeProperties: ShapeProperties) =
     }
   };
 }
+
+export const keyboard = {
+  ArrowRight,
+  ArrowLeft,
+  ArrowUp,
+  ArrowDown,
+  Space,
+  moveRight,
+  moveLeft,
+  moveDown,
+  rotate,
+  drop,
+  Reset,
+  reset,
+}

@@ -1,9 +1,10 @@
-import { keyboard, mesh as meshActions } from "../actions/index";
+import { mesh as meshActions } from "../actions/Mesh";
 import { Direction } from "../actions/keyboard";
 import { ShapeConfig, ShapeType } from "../components/ShapeConfig";
 import { store } from "../store";
 import { scan } from "../utils/scan";
 import { getPoints } from "../utils/index";
+import { keyboard } from "../actions/keyboard";
 
 
 const keyDownHandler = (e: { code: string }) => {
@@ -24,6 +25,7 @@ const keyDownHandler = (e: { code: string }) => {
         store.dispatch(
           meshActions.batchOccupy(getPoints(pos, shapeProperties))
         );
+        store.dispatch(meshActions.batchLiberateBottom())
       } else {
         store.dispatch(keyboard.moveDown(shapeProperties));
       }

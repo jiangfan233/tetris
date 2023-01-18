@@ -73,7 +73,7 @@ const isBottom = (
     case ArrowDown:
       return !blocks.every((block) => {
         const newY = Math.floor(block.yOffset + pos.y + 1);
-        const newX = pos.x + block.xOffset;
+        const newX = Math.floor(pos.x + block.xOffset);
 
         if (
           newX < 0 ||

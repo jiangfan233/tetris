@@ -1,4 +1,4 @@
-import { keyboard } from "../../actions/index";
+import { keyboard } from "../../actions/keyboard";
 import produce from "immer";
 import {
   genetateShape,
