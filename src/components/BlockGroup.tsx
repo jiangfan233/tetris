@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import { ShapeConfig, ShapeType } from "./ShapeConfig";
-import { BlockColorMap } from "../config";
+import { BlockColor, BlockColorMap } from "../config";
 import { connect } from "react-redux";
 
 type StyledBlockGroupProps = {
@@ -39,7 +39,7 @@ const StyledBlock = styled.div`
   position: absolute;
   z-index: 10;
   border: 1px solid #0e0b08;
-  background-color: ${(props: StyledBlockProps) => `${BlockColorMap[props.bgType]}`};
+  background-color: ${(props: StyledBlockProps) => `${BlockColorMap[props.bgType as BlockColor]}`};
   left: ${(props: StyledBlockProps) => `${props.xOffset}rem`};
   top: ${(props: StyledBlockProps) => `${props.yOffset}rem`};
 `;
@@ -62,7 +62,7 @@ export const BlockGroup = ({
   return (
     <StyledBlockGroup x={x} y={y} angle={angle}>
       {blocks.map((block, index) => (
-          <Block key={index} xOffset={block.xOffset} yOffset={block.yOffset} bgType={bgType} />
+          <Block key={index} xOffset={block.xOffset} yOffset={block.yOffset} bgType={bgType as string} />
         ))}
     </StyledBlockGroup>
   );
