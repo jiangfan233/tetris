@@ -79,7 +79,7 @@ const isBottom = (
           newX < 0 ||
           newX >= Mesh.width ||
           newY >= Mesh.height ||
-          mesh.points[newX][newY]
+          mesh.points[newX][newY] && mesh.points[newX][newY].val > 0
         )
           return false;
         return true;
@@ -94,7 +94,7 @@ const isBottom = (
           newX < 0 ||
           newX >= Mesh.width ||
           newY >= Mesh.height ||
-          mesh.points[newX][newY]
+          mesh.points[newX][newY] && mesh.points[newX][newY].val > 0
         )
           return false;
         return true;
@@ -109,7 +109,7 @@ const isBottom = (
           newX < 0 ||
           newX >= Mesh.width ||
           newY >= Mesh.height ||
-          mesh.points[newX][newY]
+          mesh.points[newX][newY] && mesh.points[newX][newY].val > 0
         )
           return false;
         return true;
@@ -134,7 +134,7 @@ const isTop = (
           newX < 0 ||
           newX >= Mesh.width ||
           newY >= Mesh.height ||
-          mesh.points[newX][newY]
+          mesh.points[newX][newY] && mesh.points[newX][newY].val > 0
         )
           return false;
         return true;
@@ -149,7 +149,7 @@ const isTop = (
           newX < 0 ||
           newX >= Mesh.width ||
           newY >= Mesh.height ||
-          mesh.points[newX][newY]
+          mesh.points[newX][newY] && mesh.points[newX][newY].val > 0
         )
           return false;
         return true;
@@ -164,7 +164,7 @@ const isTop = (
           newX < 0 ||
           newX >= Mesh.width ||
           newY >= Mesh.height ||
-          mesh.points[newX][newY]
+          mesh.points[newX][newY] && mesh.points[newX][newY].val > 0
         )
           return false;
         return true;
@@ -189,7 +189,7 @@ const isLeft = (
           newX < 0 ||
           newX >= Mesh.width ||
           newY >= Mesh.height ||
-          mesh.points[newX][newY]
+          mesh.points[newX][newY] && mesh.points[newX][newY].val > 0
         )
           return false;
         return true;
@@ -204,7 +204,7 @@ const isLeft = (
           newX < 0 ||
           newX >= Mesh.width ||
           newY >= Mesh.height ||
-          mesh.points[newX][newY]
+          mesh.points[newX][newY] && mesh.points[newX][newY].val > 0
         )
           return false;
         return true;
@@ -219,7 +219,7 @@ const isLeft = (
           newX < 0 ||
           newX >= Mesh.width ||
           newY >= Mesh.height ||
-          mesh.points[newX][newY]
+          mesh.points[newX][newY] && mesh.points[newX][newY].val > 0
         )
           return false;
         return true;
@@ -244,7 +244,7 @@ const isRight = (
           newX < 0 ||
           newX >= Mesh.width ||
           newY >= Mesh.height ||
-          mesh.points[newX][newY]
+          mesh.points[newX][newY] && mesh.points[newX][newY].val > 0
         )
           return false;
         return true;
@@ -259,7 +259,7 @@ const isRight = (
           newX < 0 ||
           newX >= Mesh.width ||
           newY >= Mesh.height ||
-          mesh.points[newX][newY]
+          mesh.points[newX][newY] && mesh.points[newX][newY].val > 0
         )
           return false;
         return true;
@@ -274,7 +274,7 @@ const isRight = (
           newX < 0 ||
           newX >= Mesh.width ||
           newY >= Mesh.height ||
-          mesh.points[newX][newY]
+          mesh.points[newX][newY] && mesh.points[newX][newY].val > 0
         )
           return false;
         return true;

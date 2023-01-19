@@ -1,31 +1,28 @@
 import {
-  OCCUPY,
-  LIBERATE,
   BATCH_OCCUPY,
-  BATCH_LIBERATE,
-  Point,
-  occupy,
-  liberate,
-  batchOccupy,
-  batchLiberate,
   PointAction,
-  BATCH_LIBERATE_BOTTOM,
+  BATCH_LIBERATE_ROWS,
+  SHINE_ROWS,
 } from "../../actions/Mesh";
 import { Mesh as MeshConfig } from "../../config";
-import { store } from "../../store";
-import { score, ScoreAction } from "../../actions/score";
 import produce from "immer";
 
-const initialState = {
-  points: Array(MeshConfig.width).fill(Array(MeshConfig.height).fill(0)),
+type ColorBlock = {
+  // 值
+  val: number,
+  // 颜色类型
+  bgType: string,
+  [key: string]: number | string 
+};
+export type MeshState = {
+  points: ColorBlock[][];
 };
 
-export type MeshState = {
-  points: number[][];
+const initialState: MeshState = {
+  points: Array(MeshConfig.width).fill(Array(MeshConfig.height).fill(0).map(item => ({ val: 0, bgType: "0" }))),
 };
 
 // 网格系统
-// 左上角坐标为 （0，0）
 export const MeshReducer = (
   state: MeshState = initialState,
   action: PointAction
@@ -35,41 +32,31 @@ export const MeshReducer = (
     case BATCH_OCCUPY:
       return produce(state, (draft: MeshState) => {
         action.points!.forEach((point) => {
-          draft.points[point.x][point.y] = 1;
+          draft.points[point.x][point.y].val = 1;
+          draft.points[point.x][point.y].bgType = "1";
         });
       });
 
-    // 批量解放多个点
-    case BATCH_LIBERATE:
+    // 批量解放行
+    case BATCH_LIBERATE_ROWS:
       return produce(state, (draft: MeshState) => {
-        action.points!.forEach((point) => {
-          draft.points[point.x][point.y] = 0;
-        });
+        const len = action.rows!.length;
+        const start = action.rows![0];
+        draft.points.forEach(col => {
+          col.splice(start, len);
+          col.unshift(...Array(len).fill(0).map(item => ({ val: 0, bgType: "0" })));
+        })
       });
 
-    // 批量解放底部
-    case BATCH_LIBERATE_BOTTOM:
-      return produce(state, (draft: MeshState) => {
-        // 最顶层有1，有方块了，游戏结束
-        if (!draft.points.every((col) => col[0] === 0)) {
-          return;
-        }
-        let row = MeshConfig.height - 1;
-        let count = 0;
-        while (row > 0) {
-          while (draft.points.every((col) => col[row] === 1)) {
-            draft.points.forEach((col) => {
-              col.splice(row, 1);
-              col.unshift(0);
-            });
-            count++;
-          }
-          row--;
-        }
-        // 更新分数，播放音效
-        const fn = score.genUpdateSocreAsync(MeshConfig.width * count, false)
-        store.dispatch(fn);
-      });
+    // 行闪烁
+    case SHINE_ROWS:
+      return produce(state, draft => {
+        action.rows!.forEach(row => {
+          draft.points.forEach(col => {
+            col[row].bgType = action.bgType as string;
+          })
+        })
+      })
 
     default:
       return state;

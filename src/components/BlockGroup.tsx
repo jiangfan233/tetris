@@ -1,17 +1,18 @@
 import styled from "styled-components";
-import { ShapeConfig, ShapeType, Shape } from "./ShapeConfig";
+import { ShapeConfig, ShapeType } from "./ShapeConfig";
+import { BlockColorMap } from "../config";
 import { connect } from "react-redux";
 
 type StyledBlockGroupProps = {
   x: number;
   y: number;
   angle: number;
-  center: Shape;
 };
 
 type BlockProps = {
   xOffset: number;
   yOffset: number;
+  bgType: string,
 };
 
 type StyledBlockProps = BlockProps;
@@ -28,7 +29,6 @@ const StyledBlockGroup = styled.div`
   position: absolute;
   left: ${(props: StyledBlockGroupProps) => `${props.x}rem`};
   top: ${(props: StyledBlockGroupProps) => `${props.y}rem`};
-  /* transform-origin: ${ props => `${props.center.xOffset}rem ${props.center.yOffset}rem` }; */
   transform-origin: 0 0;
   transform: ${(props: StyledBlockGroupProps) => `rotate(${props.angle * 90}deg)`};
 `;
@@ -38,14 +38,14 @@ const StyledBlock = styled.div`
   width: 1rem;
   position: absolute;
   z-index: 10;
-  background-color: #52473d;
-  border: 2px solid #0e0b08;
+  border: 1px solid #0e0b08;
+  background-color: ${(props: StyledBlockProps) => `${BlockColorMap[props.bgType]}`};
   left: ${(props: StyledBlockProps) => `${props.xOffset}rem`};
   top: ${(props: StyledBlockProps) => `${props.yOffset}rem`};
 `;
 
-export const Block = ({ xOffset, yOffset }: BlockProps) => {
-  return <StyledBlock xOffset={xOffset} yOffset={yOffset}></StyledBlock>;
+export const Block = ({ xOffset, yOffset, bgType }: BlockProps) => {
+  return <StyledBlock xOffset={xOffset} yOffset={yOffset} bgType={bgType}></StyledBlock>;
 };
 
 export const BlockGroup = ({
@@ -57,12 +57,12 @@ export const BlockGroup = ({
 }: BlockGroupProps) => {
 
   const config = ShapeConfig[shape];
-  const { blocks, center } = config;
+  const { blocks, bgType } = config;
 
   return (
-    <StyledBlockGroup x={x} y={y} center={center} angle={angle}>
+    <StyledBlockGroup x={x} y={y} angle={angle}>
       {blocks.map((block, index) => (
-          <Block key={index} xOffset={block.xOffset} yOffset={block.yOffset} />
+          <Block key={index} xOffset={block.xOffset} yOffset={block.yOffset} bgType={bgType} />
         ))}
     </StyledBlockGroup>
   );
