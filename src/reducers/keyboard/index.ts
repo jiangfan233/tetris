@@ -52,9 +52,6 @@ export const keyBoardReducer = (
 ) => {
   const { x, y } = state;
 
-  let fixX = 0;
-  let fixY = 0;
-
   switch (action.type) {
     case Space:
       return produce(state, (draft) => {

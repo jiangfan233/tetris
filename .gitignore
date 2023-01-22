@@ -22,3 +22,7 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+server/music/failure.mp3
+server/music/success.mp3
+.gitignore
+server/music/warning.mp3

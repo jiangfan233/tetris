@@ -7,6 +7,10 @@ import { getPoints, needLibeate } from "../utils/index";
 import { keyboard } from "../actions/keyboard";
 import { score } from "../actions/score";
 import { Mesh as MeshConfig } from "../config";
+import { Sound, SoundType } from "../actions/sound";
+
+
+const { FAILURE, SUCCESS, WARNING, playSound } = Sound;
 
 const keyDownHandler = (e: { code: string }) => {
   const state = store.getState();
@@ -22,6 +26,8 @@ const keyDownHandler = (e: { code: string }) => {
         // 最顶层有1，有方块了，游戏结束
         if (mesh.points.some((col) => col[1].val === 1)) {
           console.log("游戏结束");
+          const fn = playSound(FAILURE);
+          store.dispatch(fn);
           return;
         }
 
@@ -66,6 +72,8 @@ const keyDownHandler = (e: { code: string }) => {
     case keyboard.ArrowLeft:
       if (scan(pos, shapeProperties, mesh!, keyboard.ArrowLeft as Direction)) {
         console.log("到最左侧了");
+        const fn = playSound(WARNING as SoundType);
+        store.dispatch(fn);
       } else {
         store.dispatch(keyboard.moveLeft(shapeProperties));
       }
@@ -73,6 +81,8 @@ const keyDownHandler = (e: { code: string }) => {
     case keyboard.ArrowRight:
       if (scan(pos, shapeProperties, mesh!, keyboard.ArrowRight as Direction)) {
         console.log("到最右侧了");
+        const fn = playSound(WARNING as SoundType);
+        store.dispatch(fn);
       } else {
         store.dispatch(keyboard.moveRight(shapeProperties));
       }
@@ -84,6 +94,9 @@ const keyDownHandler = (e: { code: string }) => {
         scan(pos, shapeProperties, mesh!, keyboard.ArrowDown as Direction)
       ) {
         // 不可旋转
+        console.log("不可旋转");
+        const fn = playSound(WARNING as SoundType);
+        store.dispatch(fn);
         return;
       } else {
         store.dispatch(keyboard.rotate(shapeProperties));
