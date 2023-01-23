@@ -10,10 +10,12 @@ const initState = {
   "FAILURE": "",
 };
 
-export const soundReducer = (state = initState, action) => {
+export const soundReducer = (state = initState, action: { type: SoundType, sound: string }) => {
   // 播放音乐
   switch (action.type) {
     case WARNING:
+    case FAILURE:
+    case SUCCESS:
       return produce(state, draft => {
         let audio = state[action.type as SoundType];
         if (!audio) {
@@ -23,22 +25,10 @@ export const soundReducer = (state = initState, action) => {
         }
         // new Audio 是否对dom影响很大？？
         const audioEl = new Audio(audio);
+        audioEl.play();
 
-        // 如果使用保留的HTMLAudioElement实例进行播放，不灵敏，有误差
-        // why???
-        // audio.play();
       })
 
-    case FAILURE:
-      return produce(state, draft => {
-        draft[action.type] = action.sound;
-      })
-
-    case SUCCESS:
-      return produce(state, draft => {
-        console.log(action);
-        draft[action.type] = action.sound;
-      })
     default:
       return state;
   }

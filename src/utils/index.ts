@@ -55,3 +55,37 @@ export const needLibeate = (mesh: MeshState): number[] => {
   }
   return ans;
 };
+
+
+// 检测是否可旋转，有bug
+export const maybeRotate = (pos: BlockGroupPosition, shapeProperties: ShapeProperties, mesh: MeshState): boolean => {
+  const { angle } = pos;
+  const { height, width } = shapeProperties;
+
+  let long = Math.max(height!, width!);
+  let x = Math.floor(pos.x);
+  let y = Math.floor(pos.y);
+
+  switch (angle % 2) {
+    case 0:
+      for (let i = Math.floor(x - long! / 2); i <= Math.floor(x + long! / 2); i++) {
+        if (i < 0 || i >= Mesh.width || mesh.points[i] && mesh.points[i][y] && mesh.points[i][y].val) return true;
+        for (let j = Math.floor(y - long! / 2); j <= Math.floor(y + long! / 2); j++) {
+          if (j < 0 || j >= Mesh.height || mesh.points[x] && mesh.points[x][j] && mesh.points[x][j].val) return true;
+        }
+      }
+      return false;
+
+    case 1:
+      for (let i = Math.floor(x - long! / 2); i <= Math.floor(x + long! / 2); i++) {
+        if (i < 0 || i >= Mesh.width || mesh.points[i] && mesh.points[i][y] && mesh.points[i][y].val) return true;
+        for (let j = Math.floor(y - long! / 2); j <= Math.floor(y + long! / 2); j++) {
+          if (j < 0 || j >= Mesh.height || mesh.points[x] && mesh.points[x][j] && mesh.points[x][j].val) return true;
+        }
+      }
+      return false;
+  }
+
+  // 不可旋转
+  return true;
+}

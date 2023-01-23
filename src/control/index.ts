@@ -3,7 +3,7 @@ import { Direction } from "../actions/keyboard";
 import { ShapeConfig, ShapeType } from "../components/ShapeConfig";
 import { store } from "../store";
 import { scan } from "../utils/scan";
-import { getPoints, needLibeate } from "../utils/index";
+import { getPoints, maybeRotate, needLibeate } from "../utils/index";
 import { keyboard } from "../actions/keyboard";
 import { score } from "../actions/score";
 import { Mesh as MeshConfig } from "../config";
@@ -26,9 +26,8 @@ const keyDownHandler = (e: { code: string }) => {
         // 最顶层有1，有方块了，游戏结束
         if (mesh.points.some((col) => col[1].val === 1)) {
           console.log("游戏结束");
-          const fn = playSound(FAILURE);
-          store.dispatch(fn);
-          return;
+          stop();
+          return store.dispatch(playSound(FAILURE as SoundType));
         }
 
         // 批量占据方块
@@ -72,8 +71,7 @@ const keyDownHandler = (e: { code: string }) => {
     case keyboard.ArrowLeft:
       if (scan(pos, shapeProperties, mesh!, keyboard.ArrowLeft as Direction)) {
         console.log("到最左侧了");
-        const fn = playSound(WARNING as SoundType);
-        store.dispatch(fn);
+        store.dispatch(playSound(WARNING as SoundType));
       } else {
         store.dispatch(keyboard.moveLeft(shapeProperties));
       }
@@ -81,22 +79,19 @@ const keyDownHandler = (e: { code: string }) => {
     case keyboard.ArrowRight:
       if (scan(pos, shapeProperties, mesh!, keyboard.ArrowRight as Direction)) {
         console.log("到最右侧了");
-        const fn = playSound(WARNING as SoundType);
-        store.dispatch(fn);
+        store.dispatch(playSound(WARNING as SoundType));
       } else {
         store.dispatch(keyboard.moveRight(shapeProperties));
       }
       return;
     case keyboard.ArrowUp:
+      // 
       if (
-        scan(pos, shapeProperties, mesh!, keyboard.ArrowRight as Direction) ||
-        scan(pos, shapeProperties, mesh!, keyboard.ArrowLeft as Direction) ||
-        scan(pos, shapeProperties, mesh!, keyboard.ArrowDown as Direction)
+        maybeRotate(pos, shapeProperties, mesh)
       ) {
         // 不可旋转
         console.log("不可旋转");
-        const fn = playSound(WARNING as SoundType);
-        store.dispatch(fn);
+        store.dispatch(playSound(WARNING as SoundType));
         return;
       } else {
         store.dispatch(keyboard.rotate(shapeProperties));
@@ -106,24 +101,41 @@ const keyDownHandler = (e: { code: string }) => {
   }
 };
 
-let lock = false;
 let drop = false;
-document.addEventListener("keydown", (e) => {
-  if (e.code === "Space") {
-    drop = true;
-    while (drop) {
-      keyDownHandler({ code: "ArrowDown" });
+function run() :Function {
+  let lock = false;
+  let id: number | undefined;
+
+  const handleKeyDown = (e: KeyboardEvent) => {
+    if (e.code === "Space") {
+      drop = true;
+      while (drop) {
+        keyDownHandler({ code: "ArrowDown" });
+      }
+    } else {
+      lock = true;
+      keyDownHandler(e);
     }
-  } else {
-    lock = true;
-    keyDownHandler(e);
   }
-});
-document.addEventListener("keyup", (e) => {
-  if (lock) {
-    lock = false;
+  
+  const handleKeyUp = (e: KeyboardEvent) => {
+    if (lock) {
+      lock = false;
+    }
   }
-});
-setInterval(() => {
-  keyDownHandler({ code: "ArrowDown" });
-}, 1000);
+
+  document.addEventListener("keydown", handleKeyDown);
+  document.addEventListener("keyup", handleKeyUp);
+  id = setInterval(() => {
+    keyDownHandler({ code: "ArrowDown" });
+  }, 1000);
+
+  return () => {
+    clearInterval(id);
+    document.removeEventListener("keydown", handleKeyDown);
+    document.removeEventListener("keyup", handleKeyUp);
+  }
+}
+
+
+const stop = run();
