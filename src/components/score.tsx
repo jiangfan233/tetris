@@ -6,9 +6,11 @@ type Props = {
   score: number;
 };
 
-const P = styled.p`
+const P = styled.p.attrs({
+  className: "bg-orange-300"
+})`
   font-size: 2rem;
-  margin: 0.5rem;
+  z-index: 2;
 `
 
 export const Score = ({ dispatch, score }: Props) => {

@@ -71,7 +71,7 @@ export const maybeRotate = (pos: BlockGroupPosition, shapeProperties: ShapePrope
       for (let i = Math.floor(x - long! / 2); i <= Math.floor(x + long! / 2); i++) {
         if (i < 0 || i >= Mesh.width || mesh.points[i] && mesh.points[i][y] && mesh.points[i][y].val) return true;
         for (let j = Math.floor(y - long! / 2); j <= Math.floor(y + long! / 2); j++) {
-          if (j < 0 || j >= Mesh.height || mesh.points[x] && mesh.points[x][j] && mesh.points[x][j].val) return true;
+          if (j >= Mesh.height || mesh.points[x] && mesh.points[x][j] && mesh.points[x][j].val) return true;
         }
       }
       return false;
@@ -80,7 +80,7 @@ export const maybeRotate = (pos: BlockGroupPosition, shapeProperties: ShapePrope
       for (let i = Math.floor(x - long! / 2); i <= Math.floor(x + long! / 2); i++) {
         if (i < 0 || i >= Mesh.width || mesh.points[i] && mesh.points[i][y] && mesh.points[i][y].val) return true;
         for (let j = Math.floor(y - long! / 2); j <= Math.floor(y + long! / 2); j++) {
-          if (j < 0 || j >= Mesh.height || mesh.points[x] && mesh.points[x][j] && mesh.points[x][j].val) return true;
+          if (j >= Mesh.height || mesh.points[x] && mesh.points[x][j] && mesh.points[x][j].val) return true;
         }
       }
       return false;

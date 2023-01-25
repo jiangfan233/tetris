@@ -5,11 +5,11 @@ import { MeshBlocksWrapper } from "./MeshBlocks"
 
 const StyledContainer = styled.div`
   box-sizing: content-box;
-  border: 1px solid black;
+  /* border: 1px solid black; */
   border-top: 0;
   height: ${MeshConfig.height}rem;
   width: ${MeshConfig.width}rem;
-  background-color: #bec8d1;
+  background-color: white;
   position: relative;
 `
 

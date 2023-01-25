@@ -13,6 +13,7 @@ type BlockProps = {
   xOffset: number;
   yOffset: number;
   bgType: string,
+  value: number
 };
 
 type StyledBlockProps = BlockProps;
@@ -27,6 +28,7 @@ type BlockGroupProps = {
 
 const StyledBlockGroup = styled.div`
   position: absolute;
+  z-index: 1;
   left: ${(props: StyledBlockGroupProps) => `${props.x}rem`};
   top: ${(props: StyledBlockGroupProps) => `${props.y}rem`};
   transform-origin: 0 0;
@@ -37,15 +39,24 @@ const StyledBlock = styled.div`
   height: 1rem;
   width: 1rem;
   position: absolute;
-  z-index: 10;
-  border: 1px solid #0e0b08;
-  background-color: ${(props: StyledBlockProps) => `${BlockColorMap[props.bgType as BlockColor]}`};
+  z-index: ${(props: StyledBlockProps) => props.value};
+  border: ${(props: StyledBlockProps) => `2px solid ${BlockColorMap[props.bgType as BlockColor]}`};
   left: ${(props: StyledBlockProps) => `${props.xOffset}rem`};
   top: ${(props: StyledBlockProps) => `${props.yOffset}rem`};
+
+  &::after{
+    content: "";
+    position: absolute;
+    height: 0.5rem;
+    width: 0.5rem;
+    top: calc(0.25rem - 2px);
+    left: calc(0.25rem - 2px);
+    background-color: ${(props: StyledBlockProps) => `${BlockColorMap[props.bgType as BlockColor]}`};
+  }
 `;
 
-export const Block = ({ xOffset, yOffset, bgType }: BlockProps) => {
-  return <StyledBlock xOffset={xOffset} yOffset={yOffset} bgType={bgType}></StyledBlock>;
+export const Block = ({ xOffset, yOffset, bgType, value }: BlockProps) => {
+  return <StyledBlock xOffset={xOffset} yOffset={yOffset} bgType={bgType} value={value}></StyledBlock>;
 };
 
 export const BlockGroup = ({

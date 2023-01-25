@@ -5,11 +5,11 @@ export const Mesh = {
 
 export const BlockColorMap = {
   // 初始颜色
-  "0": "#f8f6f67e",
+  "0": "rgb(209 213 219)",
   // 占据颜色
-  "1": "#52473d",
+  "1": "black",
   // 闪烁颜色
-  "2": "green",
+  "2": "rgb(101 163 13)",
 };
 
 export type BlockColor = keyof typeof BlockColorMap;
