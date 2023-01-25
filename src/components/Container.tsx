@@ -3,10 +3,10 @@ import styled from "styled-components"
 import { Mesh as MeshConfig } from "../config"
 import { MeshBlocksWrapper } from "./MeshBlocks"
 
-const StyledContainer = styled.div`
+const StyledContainer = styled.div.attrs({})`
   box-sizing: content-box;
-  /* border: 1px solid black; */
-  border-top: 0;
+  border: 0.5rem solid #d2cfcf;
+  border-style: inset;
   height: ${MeshConfig.height}rem;
   width: ${MeshConfig.width}rem;
   background-color: white;
@@ -14,11 +14,11 @@ const StyledContainer = styled.div`
 `
 
 
-export const Container = ({ children } : {children: JSX.Element}) => {
+export const Container = ({ children }: { children: JSX.Element }) => {
 
   return (
     <StyledContainer>
-      { children }
+      {children}
       <MeshBlocksWrapper />
     </StyledContainer>
   )

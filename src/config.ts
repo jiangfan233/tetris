@@ -5,7 +5,7 @@ export const Mesh = {
 
 export const BlockColorMap = {
   // 初始颜色
-  "0": "rgb(209 213 219)",
+  "0": "rgba(54,83,20,0.4)",
   // 占据颜色
   "1": "black",
   // 闪烁颜色
