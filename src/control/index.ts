@@ -7,7 +7,7 @@ import { getPoints, maybeRotate, needLibeate } from "../utils/index";
 import { keyboard } from "../actions/keyboard";
 import { score } from "../actions/score";
 import { Mesh as MeshConfig } from "../config";
-import { Sound, SoundType } from "../actions/sound";
+import { Sound } from "../actions/sound";
 
 
 const { FAILURE, SUCCESS, WARNING, playSound } = Sound;
@@ -27,7 +27,7 @@ const keyDownHandler = (e: { code: string }) => {
         if (mesh.points.some((col) => col[1].val === 1)) {
           console.log("游戏结束");
           stop();
-          return store.dispatch(playSound(FAILURE as SoundType));
+          return store.dispatch(playSound(FAILURE));
         }
 
         // 批量占据方块
@@ -71,7 +71,7 @@ const keyDownHandler = (e: { code: string }) => {
     case keyboard.ArrowLeft:
       if (scan(pos, shapeProperties, mesh!, keyboard.ArrowLeft as Direction)) {
         console.log("到最左侧了");
-        store.dispatch(playSound(WARNING as SoundType));
+        store.dispatch(playSound(WARNING));
       } else {
         store.dispatch(keyboard.moveLeft(shapeProperties));
       }
@@ -79,7 +79,7 @@ const keyDownHandler = (e: { code: string }) => {
     case keyboard.ArrowRight:
       if (scan(pos, shapeProperties, mesh!, keyboard.ArrowRight as Direction)) {
         console.log("到最右侧了");
-        store.dispatch(playSound(WARNING as SoundType));
+        store.dispatch(playSound(WARNING));
       } else {
         store.dispatch(keyboard.moveRight(shapeProperties));
       }
@@ -91,7 +91,7 @@ const keyDownHandler = (e: { code: string }) => {
       ) {
         // 不可旋转
         console.log("不可旋转");
-        store.dispatch(playSound(WARNING as SoundType));
+        store.dispatch(playSound(WARNING));
         return;
       } else {
         store.dispatch(keyboard.rotate(shapeProperties));

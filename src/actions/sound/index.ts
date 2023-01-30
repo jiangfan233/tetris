@@ -1,20 +1,15 @@
-import { request } from "../../../api/index"
+import { requestAudio, AudioCache } from "./sound";
+import { WARNING, SUCCESS, FAILURE, type SoundType } from "./types";
 
-const WARNING = "WARNING";
-const FAILURE = "FAILURE";
-const SUCCESS = "SUCCESS";
-
-export type SoundType = typeof WARNING | typeof FAILURE | typeof SUCCESS;
 
 
 export const playSound = (type: SoundType) => {
   return async (dispatch: Function, getState: Function) => {
-    let sound = getState().sound[type];
-    if (!sound) {
-      console.log("获取资源")
-      sound = await request.post("/sound", { type });
-    }
-    dispatch({ type, sound });
+    // if (!AudioCache[type]) {
+    //   console.log("获取资源")
+    //   await requestAudio(type);
+    // }
+    dispatch({ type });
   }
 }
 

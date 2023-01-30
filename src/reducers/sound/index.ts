@@ -1,6 +1,7 @@
 import produce from "immer"
-import { Sound, type SoundType } from "../../actions/sound"
-
+import { Sound } from "../../actions/sound"
+import { type SoundType } from "../../actions/sound/types";
+import { AudioCache } from "../../actions/sound/sound";
 
 const { WARNING, SUCCESS, FAILURE } = Sound;
 
@@ -10,24 +11,14 @@ const initState = {
   "FAILURE": "",
 };
 
-export const soundReducer = (state = initState, action: { type: SoundType, sound: string }) => {
+export const soundReducer = (state = initState, action: { type: SoundType }) => {
   // 播放音乐
+  const { type } = action;
   switch (action.type) {
     case WARNING:
     case FAILURE:
     case SUCCESS:
-      return produce(state, draft => {
-        let audio = state[action.type as SoundType];
-        if (!audio) {
-          // audio = new Audio("data:audio/x-mpeg;base64," + action.sound);
-          audio = "data:audio/x-mpeg;base64," + action.sound;
-          draft[action.type] = audio;
-        }
-        // new Audio 是否对dom影响很大？？
-        const audioEl = new Audio(audio);
-        audioEl.play();
-
-      })
+      AudioCache[type]!().start()
 
     default:
       return state;
