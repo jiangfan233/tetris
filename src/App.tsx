@@ -3,7 +3,7 @@ import styled from "styled-components";
 import GlobalBlockGroup from "./components/BlockGroup";
 import { Container } from "./components/Container";
 import "./control/index"
-import { GlobalScore } from "./components/score";
+import { GlobalScore } from "./components/details/score";
 import { Decorator } from "./components/decorator"
 
 

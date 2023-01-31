@@ -1,0 +1,267 @@
+:root{
+  --font-color: #0d131d;
+}
+
+.light {
+  font-size: 6px;
+  width: 100%;
+  background: #f1f2f3;
+  height: 3.75em;
+  display: flex;
+  justify-content: right;
+}
+
+.digits{
+  width: min-content;
+}
+
+.digits div {
+  text-align: center;
+  position: relative;
+  width: 1.8em;
+  height: 3.125em;
+  display: inline-block;
+  margin: 0 .25em;
+}
+.light .digits div span {
+  background-color: var(--font-color);
+  border-color: var(--font-color);
+}
+
+.digits div span {
+  opacity: 0;
+  position: absolute;
+  -webkit-transition: 0.25s;
+  -moz-transition: 0.25s;
+  transition: 0.25s;
+}
+.digits div span:before,
+.digits div span:after {
+  content: "";
+  position: absolute;
+  width: 0;
+  height: 0;
+  border: .3125em solid transparent;
+}
+
+.digits .d1 {
+  height: .3125em;
+  width: 1em;
+  top: 0;
+  left: .375em;
+}
+.digits .d1:before {
+  border-width: 0 .3125em .3125em 0;
+  border-right-color: inherit;
+  left: -0.3125em;
+}
+.digits .d1:after {
+  border-width: 0 0 .3125em .3125em;
+  border-left-color: inherit;
+  right: -0.3125em;
+}
+
+.digits .d2 {
+  height: .3125em;
+  width: 1em;
+  top: 1.5em;
+  left: .375em;
+}
+.digits .d2:before {
+  border-width: .1875em .25em .125em;
+  border-right-color: inherit;
+  left: -0.5em;
+}
+.digits .d2:after {
+  border-width: .1875em .25em .125em;
+  border-left-color: inherit;
+  right: -0.5em;
+}
+
+.digits .d3 {
+  height: .3125em;
+  width: 1em;
+  top: 3em;
+  left: .375em;
+}
+.digits .d3:before {
+  border-width: .3125em .3125em 0 0;
+  border-right-color: inherit;
+  left: -0.3125em;
+}
+.digits .d3:after {
+  border-width: .3125em 0 0 .3125em;
+  border-left-color: inherit;
+  right: -0.3125em;
+}
+
+.digits .d4 {
+  width: .3125em;
+  height: .875em;
+  top: .4375em;
+  left: 0;
+}
+.digits .d4:before {
+  border-width: 0 .3125em .3125em 0;
+  border-bottom-color: inherit;
+  top: -0.3125em;
+}
+.digits .d4:after {
+  border-width: 0 0 .3125em .3125em;
+  border-left-color: inherit;
+  bottom: -0.3125em;
+}
+
+.digits .d5 {
+  width: .3125em;
+  height: .875em;
+  top: .4375em;
+  right: 0;
+}
+.digits .d5:before {
+  border-width: 0 0 .3125em .3125em;
+  border-bottom-color: inherit;
+  top: -0.3125em;
+}
+.digits .d5:after {
+  border-width: .3125em 0 0 .3125em;
+  border-top-color: inherit;
+  bottom: -0.3125em;
+}
+
+.digits .d6 {
+  width: .3125em;
+  height: .875em;
+  top: 2em;
+  left: 0;
+}
+.digits .d6:before {
+  border-width: 0 .3125em .3125em 0;
+  border-bottom-color: inherit;
+  top: -0.3125em;
+}
+.digits .d6:after {
+  border-width: 0 0 .3125em .3125em;
+  border-left-color: inherit;
+  bottom: -0.3125em;
+}
+
+.digits .d7 {
+  width: .3125em;
+  height: .875em;
+  top: 2em;
+  right: 0;
+}
+.digits .d7:before {
+  border-width: 0 0 .3125em .3125em;
+  border-bottom-color: inherit;
+  top: -0.3125em;
+}
+.digits .d7:after {
+  border-width: .3125em 0 0 .3125em;
+  border-top-color: inherit;
+  bottom: -0.3125em;
+}
+
+/* 1 */
+.digits div.one .d5,
+.digits div.one .d7 {
+  opacity: 1;
+}
+
+/* 2 */
+.digits div.two .d1,
+.digits div.two .d5,
+.digits div.two .d2,
+.digits div.two .d6,
+.digits div.two .d3 {
+  opacity: 1;
+}
+
+/* 3 */
+.digits div.three .d1,
+.digits div.three .d5,
+.digits div.three .d2,
+.digits div.three .d7,
+.digits div.three .d3 {
+  opacity: 1;
+}
+
+/* 4 */
+.digits div.four .d5,
+.digits div.four .d2,
+.digits div.four .d4,
+.digits div.four .d7 {
+  opacity: 1;
+}
+
+/* 5 */
+.digits div.five .d1,
+.digits div.five .d2,
+.digits div.five .d4,
+.digits div.five .d3,
+.digits div.five .d7 {
+  opacity: 1;
+}
+
+/* 6 */
+.digits div.six .d1,
+.digits div.six .d2,
+.digits div.six .d4,
+.digits div.six .d3,
+.digits div.six .d6,
+.digits div.six .d7 {
+  opacity: 1;
+}
+
+/* 7 */
+.digits div.seven .d1,
+.digits div.seven .d5,
+.digits div.seven .d7 {
+  opacity: 1;
+}
+
+/* 8 */
+.digits div.eight .d1,
+.digits div.eight .d2,
+.digits div.eight .d3,
+.digits div.eight .d4,
+.digits div.eight .d5,
+.digits div.eight .d6,
+.digits div.eight .d7 {
+  opacity: 1;
+}
+
+/* 9 */
+.digits div.nine .d1,
+.digits div.nine .d2,
+.digits div.nine .d3,
+.digits div.nine .d4,
+.digits div.nine .d5,
+.digits div.nine .d7 {
+  opacity: 1;
+}
+
+/* 0 */
+.digits div.zero .d1,
+.digits div.zero .d3,
+.digits div.zero .d4,
+.digits div.zero .d5,
+.digits div.zero .d6,
+.digits div.zero .d7 {
+  opacity: 1;
+}
+
+/* dot */
+.digits div.dot {
+  width: .3125em;
+}
+.dot:after {
+  width: .3125em;
+  height: .3125em;
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0em;
+  background-color: var(--font-color);
+}

@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import { connect } from "react-redux";
+import { DigitNumberGroup } from "../digitNumber/digitNumber";
 
 type Props = {
   dispatch?: Function;
@@ -7,14 +8,16 @@ type Props = {
 };
 
 const P = styled.p.attrs({
-  className: "bg-orange-300"
 })`
-  font-size: 2rem;
-  z-index: 2;
+  font-size: 1.2rem;
+  background-color: white;
 `
 
 export const Score = ({ dispatch, score }: Props) => {
-  return <P>score: {score}</P>
+  return (<div>
+    <P>Score:</P>
+    <DigitNumberGroup value={score}></DigitNumberGroup>
+  </div>)
 }
 
 const mapStateToProps = (state) => {
