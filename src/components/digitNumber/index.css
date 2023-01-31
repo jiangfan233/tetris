@@ -4,8 +4,8 @@
 
 .light {
   font-size: 6px;
-  width: 100%;
-  background: #f1f2f3;
+  /* width: 3em; */
+  /* background: #f1f2f3; */
   height: 3.75em;
   display: flex;
   justify-content: right;
@@ -21,7 +21,7 @@
   width: 1.8em;
   height: 3.125em;
   display: inline-block;
-  margin: 0 .25em;
+  margin: .25em;
 }
 .light .digits div span {
   background-color: var(--font-color);

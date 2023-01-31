@@ -10,7 +10,7 @@ type Props = {
 const P = styled.p.attrs({
 })`
   font-size: 1.2rem;
-  background-color: white;
+  color: white;
 `
 
 export const Score = ({ dispatch, score }: Props) => {
