@@ -4,7 +4,7 @@ import GlobalBlockGroup from "./components/BlockGroup";
 import { Container } from "./components/Container";
 import "./control/index"
 import { GlobalScore } from "./components/score";
-
+import { Decorator } from "./components/decorator"
 
 
 const StyledApp = styled.div.attrs(
@@ -18,6 +18,7 @@ const StyledApp = styled.div.attrs(
   align-items: center;
   width: 100%;
   height: 100%;
+  padding: 1rem;
 `
 
 
@@ -25,10 +26,12 @@ function App() {
 
   return (
     <StyledApp>
-      <GlobalScore />
-      <Container>
-        <GlobalBlockGroup />
-      </Container>
+      <Decorator>
+        <Container>
+          <GlobalBlockGroup />
+        </Container>
+        <GlobalScore />
+      </Decorator>
     </StyledApp>
   )
 }
