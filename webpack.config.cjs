@@ -36,7 +36,7 @@ module.exports = {
   ],
 
   output: {
-    path: path.resolve(__dirname, "doc"),
+    path: path.resolve(__dirname, "docs"),
     filename: "[name].bundle.js",
     chunkFilename: "[name].chunk.js",
     clean: true,
