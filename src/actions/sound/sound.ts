@@ -1,5 +1,7 @@
 import { WARNING, SUCCESS, FAILURE, type SoundType } from "./types";
-
+import warningMp3 from "../../../public/static/warning.mp3";
+import failureMp3 from "../../../public/static/failure.mp3";
+import successMp3 from "../../../public/static/success.mp3"
 
 // 使用 Web Audio API
 const AudioContext = window.AudioContext;
@@ -9,9 +11,9 @@ export const hasWebAudioAPI = {
 };
 
 const Map = {
-  [WARNING]: "/static/warning.mp3",
-  [FAILURE]: "/static/failure.mp3",
-  [SUCCESS]: "/static/success.mp3"
+  [WARNING]: warningMp3,
+  [FAILURE]: failureMp3,
+  [SUCCESS]: successMp3,
 }
 
 type AudioCache = {

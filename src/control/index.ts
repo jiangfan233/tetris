@@ -117,23 +117,36 @@ export const keyDownHandler = (e: { code: string }) => {
   }
 };
 
+function debounce(fn: Function, duration: number) {
+  let id: number | null = null;
+  return function () {
+    if (id) {
+      return;
+    } else {
+      fn()
+      id = window.setTimeout(() => {
+        clearTimeout(id!);
+        id = null;
+      }, duration)
+    }
+  }
+}
+
 // 简易移动端适配
 function init() {
-  let width = document.body.clientWidth || window.screen.width;
-  let height = document.body.clientHeight || window.screen.height;
+  let width = document.body.clientWidth;
+  const html = document.querySelector("html");
 
-  if (!width || !height) return;
-  const small = Math.min(width, height);
-  if(small < 750) {
-    const html = document.querySelector("html");
-    html!.style.fontSize = (small / 600) * 16 + "px";
+  if (!width) return;
+  if (width < 750) {
+    html!.style.fontSize = Math.floor(width / 600 * 16) + "px";
   }
 }
 
 function run(): Function {
   init()
-
-  window.addEventListener("resize", init)
+  const fn = debounce(init, 300);
+  window.addEventListener("resize", () => fn());
 
   let lock = false;
   let id: number | undefined;
@@ -151,7 +164,7 @@ function run(): Function {
 
   document.addEventListener("keydown", handleKeyDown);
   document.addEventListener("keyup", handleKeyUp);
-  id = setInterval(() => {
+  id = window.setInterval(() => {
     keyDownHandler({ code: "ArrowDown" });
   }, 1000);
 
