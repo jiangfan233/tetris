@@ -24,7 +24,8 @@ module.exports = {
       chunkFilename: "[id].css",
     }),
     new CssMinimizerPlugin(),
-    new BundleAnalyzerPlugin(),
+    // 依赖分析图
+    // new BundleAnalyzerPlugin(),
     new webpack.optimize.ModuleConcatenationPlugin(),
     // new CommonsChunkPlugin({
     //   // 从哪些 Chunk 中提取
@@ -35,7 +36,7 @@ module.exports = {
   ],
 
   output: {
-    path: path.resolve(__dirname, "dist"),
+    path: path.resolve(__dirname, "doc"),
     filename: "[name].bundle.js",
     chunkFilename: "[name].chunk.js",
     clean: true,
