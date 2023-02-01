@@ -133,6 +133,8 @@ function init() {
 function run(): Function {
   init()
 
+  window.addEventListener("resize", init)
+
   let lock = false;
   let id: number | undefined;
 
@@ -157,6 +159,7 @@ function run(): Function {
     clearInterval(id);
     document.removeEventListener("keydown", handleKeyDown);
     document.removeEventListener("keyup", handleKeyUp);
+    window.removeEventListener("resize", init);
   }
 }
 
