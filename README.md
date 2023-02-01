@@ -1,4 +1,4 @@
-俄罗斯方块小游戏，用于练习react、redux、typescript；
+俄罗斯方块小游戏，用于练习react、redux、typescript、tailwindcss、移动端适配；
 
 目前已实现实现基本的碰撞检测功能。
 
