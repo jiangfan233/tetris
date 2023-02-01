@@ -30,6 +30,7 @@ export const Block = ({ dispatch, x, y, angle=0 }: BlockProps) => {
   return <StyledBlock x={x} y={y} angle={angle * 90}></StyledBlock>;
 };
 
+// @ts-ignore
 const mapStateToProps = (state) => {
   return {
     x: state.keyboard.x,

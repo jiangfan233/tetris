@@ -14,6 +14,7 @@ export const MeshBlocks = ({ mesh }: { mesh: MeshState }) => {
   );
 };
 
+// @ts-ignore
 const cfg = (store) => ({
   mesh: store.mesh,
 });

@@ -1,5 +1,4 @@
 import styled from "styled-components";
-import { BlockColorMap } from "../../config";
 import "./index.css"
 
 const Ul = styled.ul`
@@ -7,6 +6,7 @@ const Ul = styled.ul`
   background-color: white;
   justify-content: right;
   padding: 0 0.2rem;
+  border: 0.2rem inset black;
 `;
 
 export const DigitNumberGroup = ({ value: num }: { value: number }) => {

@@ -19,7 +19,7 @@ export const Score = ({ dispatch, score }: Props) => {
     <DigitNumberGroup value={score}></DigitNumberGroup>
   </div>)
 }
-
+// @ts-ignore
 const mapStateToProps = (state) => {
   return {
     score: state.score

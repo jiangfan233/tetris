@@ -15,6 +15,8 @@ export type Direction =
   | typeof ArrowUp
   | typeof ArrowDown;
 
+export type Keys = Direction | typeof Space;
+
 export type KeyboardAction = {
   type:
     | typeof ArrowRight

@@ -13,7 +13,7 @@ type BlockProps = {
   xOffset: number;
   yOffset: number;
   bgType: string,
-  value: number
+  value?: number
 };
 
 type StyledBlockProps = BlockProps;
@@ -79,7 +79,7 @@ export const BlockGroup = ({
   );
 };
 
-
+// @ts-ignore
 const mapStateToProps = (state) => {
   return {
     x: state.keyboard.x,

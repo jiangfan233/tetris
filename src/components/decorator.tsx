@@ -1,6 +1,7 @@
 import styled from "styled-components"
 import React from "react"
-import { Button } from "./button"
+import { Row } from "./common"
+import { ButtonGroup } from "./button/buttonGroup"
 
 
 
@@ -26,19 +27,7 @@ const P = styled.p`
   
 `
 
-const Row = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.5rem;
-`
-const Col = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  gap: 0.5rem;
-`
+
 
 const Border = styled.div.attrs({
   className: "bg-orange-300"
@@ -62,19 +51,7 @@ export const Decorator = ({ children: BlockContainer }: { children: React.ReactN
         </Row>
       </Div>
 
-      <Row style={{ gap: "10rem", marginTop: "5rem" }}>
-        <Button size="large">OK</Button>
-        <Col style={{ rotate: "45deg", gap: "1.5rem" }}>
-          <Row style={{ alignItems: "center", gap: "1.5rem" }}>
-            <Button size="small">Rank+</Button>
-            <Button size="small">Vol+</Button>
-          </Row>
-          <Row style={{ alignItems: "center", gap: "1.5rem" }}>
-            <Button size="small">Vol-</Button>
-            <Button size="small">Rank-</Button>
-          </Row>
-        </Col>
-      </Row>
+      <ButtonGroup />
     </Border>
   )
 }

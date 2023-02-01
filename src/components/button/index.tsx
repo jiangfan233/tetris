@@ -1,5 +1,5 @@
 import styled from "styled-components"
-import React from "react";
+import { Keys } from "../../actions/keyboard";
 
 type ButtonSize = "large" | "small";
 
@@ -23,8 +23,16 @@ const StyledButton = styled.button`
   }
 `
 
-export const Button = ({ size = "large", children }: { size: ButtonSize, children: React.ReactNode }) => {
+type ButtonProps = {
+  size: ButtonSize,
+  children: React.ReactNode,
+  type: Keys,
+  onClick: Function
+}
+
+export const Button = ({ size = "large", children, type, onClick }: ButtonProps) => {
+
   return (
-    <StyledButton size={size}>{children}</StyledButton>
+    <StyledButton onClick={() => { onClick(type) }} size={size}>{children}</StyledButton>
   )
 }
