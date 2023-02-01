@@ -4,7 +4,10 @@ const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const CssMinimizerPlugin = require("css-minimizer-webpack-plugin");
 const webpack = require("webpack");
 const TerserPlugin = require("terser-webpack-plugin");
-const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
+
+const UglifyJsPlugin = require("uglifyjs-webpack-plugin");
+
+// const BundleAnalyzerPlugin =require("webpack-bundle-analyzer").BundleAnalyzerPlugin;
 
 // 提取公共代码
 // const CommonsChunkPlugin = require('webpack/lib/optimize/CommonsChunkPlugin');
@@ -85,18 +88,51 @@ module.exports = {
 
   // 优化
   optimization: {
+    sideEffects: true,
     // production 环境默认开启，其他环境默认关闭
     concatenateModules: true,
     // 是否对未使用的导出进行内部分析
     innerGraph: false,
     minimize: true,
-    minimizer: [new TerserPlugin({
-      include: /\.(js|css)$/i,
-      // 是否提取注释
-      extractComments: false,
-    })],
+    minimizer: [
+      // new TerserPlugin({
+      //   include: /\.(js|css)$/i,
+      //   // 是否提取注释
+      //   extractComments: false,
+      //   minify: TerserPlugin.swcMinify,
+      //   terserOptions: {
+      //     compress: true,
+      //     keepClassnames: false,
+      //     keepFnames: false,
+      //     mangle: true,
+      //   },
+      // }),
+      new UglifyJsPlugin({
+        // 启用/禁用文件缓存。
+        cache: true,
+        // 多进程
+        parallel: true,
+        uglifyOptions: {
+          warnings: false,
+          parse: {},
+          compress: {
+            drop_console: true,
+            drop_debugger: true,
+          },
+          mangle: true, // 注意 `mangle.properties` 的默认值是 `false`。
+          output: {
+            // 是否保留注释
+            comments: false,
+          },
+          toplevel: false,
+          nameCache: null,
+          ie8: false,
+          keep_fnames: false,
+          
+        },
+      }),
+    ],
     // 是否生成具有相对路径的记录，以便能够移动上下文文件夹。
     portableRecords: true,
   },
-
 };

@@ -29,6 +29,7 @@ function App() {
 
   return (
     <StyledApp className="text-xxm xs:text-xs sm:text-sm md:text-base">
+      <div className="m-6 font-bold" style={{fontSize: "20px"}}>建议调低音量；此项目仍在开发中，存在不少bug。。。</div>
       <Decorator>
         <Container>
           <GlobalBlockGroup />
