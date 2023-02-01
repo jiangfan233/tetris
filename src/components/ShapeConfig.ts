@@ -11,6 +11,7 @@ export type ShapeProperties = {
   center?: Shape,
   width?: number,
   height?: number,
+  bgType?: string,
 };
 
 export type ShapeConfigType = {
@@ -71,11 +72,10 @@ const generateInfoForShape = (ShapeConfig: ShapeConfigType) => {
     info.height = ySet.size;
     info.width = xSet.size;
     info.center = { 
-      // xOffset: Math.floor(info.width / 2), 
-      // yOffset: Math.floor(info.height / 2),
       xOffset: info.width / 2, 
       yOffset: info.height / 2,
     }
+    info.bgType = "1";
   })
   return ShapeConfig;
 }

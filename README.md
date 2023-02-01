@@ -1,9 +1,8 @@
-开发中！
-俄罗斯方块小游戏，用于练习react、redux、typescript、tailwindcss、移动端适配；
 
-主要代码在dev分支。
+俄罗斯方块小游戏（开发中），用于练习react、redux、typescript；
 
-目前已实现碰撞检测功能、移动端简易适配、css布局样式、警告以及失败音效。
+目前已实现实现基本的碰撞检测功能。
+
 
 使用须知：
 1、该项目仅用于学习目的，如有侵权请联系: lostwind233@outlook.com；

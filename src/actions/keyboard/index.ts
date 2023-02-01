@@ -15,6 +15,8 @@ export type Direction =
   | typeof ArrowUp
   | typeof ArrowDown;
 
+export type Keys = Direction | typeof Space;
+
 export type KeyboardAction = {
   type:
     | typeof ArrowRight
@@ -103,4 +105,19 @@ export const reset :KeyboardActionCreator = (shapeProperties: ShapeProperties) =
       height: shapeProperties.height!
     }
   };
+}
+
+export const keyboard = {
+  ArrowRight,
+  ArrowLeft,
+  ArrowUp,
+  ArrowDown,
+  Space,
+  moveRight,
+  moveLeft,
+  moveDown,
+  rotate,
+  drop,
+  Reset,
+  reset,
 }
