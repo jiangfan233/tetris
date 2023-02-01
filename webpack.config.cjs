@@ -1,8 +1,10 @@
 const path = require("path");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+const CssMinimizerPlugin = require("css-minimizer-webpack-plugin");
 const webpack = require("webpack");
 const TerserPlugin = require("terser-webpack-plugin");
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 
 // 提取公共代码
 // const CommonsChunkPlugin = require('webpack/lib/optimize/CommonsChunkPlugin');
@@ -11,26 +13,18 @@ module.exports = {
   entry: "./src/main.tsx",
   mode: "production",
 
-  // 优化
-  optimization: {
-    // production 环境默认开启，其他环境默认关闭
-    concatenateModules: true,
-    // 是否对未使用的导出进行内部分析
-    innerGraph: false,
-    minimize: true,
-    minimizer: [new TerserPlugin({
-      include: /\.(js|css)$/i,
-      extractComments: false,
-    })],
-  },
-
   plugins: [
     new HtmlWebpackPlugin({
       filename: "index.html",
       title: "Test Build-俄罗斯方块",
       template: "./index.html",
     }),
-    new MiniCssExtractPlugin(),
+    new MiniCssExtractPlugin({
+      filename: "[name].css",
+      chunkFilename: "[id].css",
+    }),
+    new CssMinimizerPlugin(),
+    new BundleAnalyzerPlugin(),
     new webpack.optimize.ModuleConcatenationPlugin(),
     // new CommonsChunkPlugin({
     //   // 从哪些 Chunk 中提取
@@ -87,4 +81,21 @@ module.exports = {
       },
     ],
   },
+
+  // 优化
+  optimization: {
+    // production 环境默认开启，其他环境默认关闭
+    concatenateModules: true,
+    // 是否对未使用的导出进行内部分析
+    innerGraph: false,
+    minimize: true,
+    minimizer: [new TerserPlugin({
+      include: /\.(js|css)$/i,
+      // 是否提取注释
+      extractComments: false,
+    })],
+    // 是否生成具有相对路径的记录，以便能够移动上下文文件夹。
+    portableRecords: true,
+  },
+
 };
