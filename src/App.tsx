@@ -7,12 +7,7 @@ import { GlobalScore } from "./components/details/score";
 import { Decorator } from "./components/decorator"
 
 
-const StyledApp = styled.div.attrs(
-  // 背景颜色默认黑色，屏幕宽度大于sm时，背景颜色变为白色
-  props => ({
-    className: "overflow-hidden"
-  })
-)`
+const StyledApp = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;

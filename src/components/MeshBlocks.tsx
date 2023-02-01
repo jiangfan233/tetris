@@ -7,7 +7,7 @@ export const MeshBlocks = ({ mesh }: { mesh: MeshState }) => {
     <>
       {mesh.points.map((col, xIndex) => {
         return col.map((point, yIndex) => {
-          return <Block key={xIndex + yIndex} xOffset={xIndex} yOffset={yIndex} bgType = {point.bgType} value={point.val} />
+          return <Block key={xIndex + "" + yIndex} xOffset={xIndex} yOffset={yIndex} bgType = {point.bgType} value={point.val} />
         });
       })}
     </>

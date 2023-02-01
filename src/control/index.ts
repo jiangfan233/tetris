@@ -6,7 +6,6 @@ import { scan } from "../utils/scan";
 import { getPoints, maybeRotate, needLibeate } from "../utils/index";
 import { keyboard } from "../actions/keyboard";
 import { score } from "../actions/score";
-import { Mesh as MeshConfig } from "../config";
 import { Sound } from "../actions/sound";
 
 
@@ -53,7 +52,7 @@ export const keyDownHandler = (e: { code: string }) => {
             // 更新分数
             store.dispatch(
               score.updateScore(
-                needLiberateRows.length * MeshConfig.width,
+                needLiberateRows.length,
                 false
               )
             );
@@ -98,13 +97,13 @@ export const keyDownHandler = (e: { code: string }) => {
         store.dispatch(keyboard.rotate(shapeProperties));
       }
       return;
-    
+
     case keyboard.Space:
       let p = pos;
       let sp = shapeProperties;
       let m = mesh;
 
-      while(!scan(p, sp, m!, keyboard.ArrowDown as Direction)) {
+      while (!scan(p, sp, m!, keyboard.ArrowDown as Direction)) {
         store.dispatch(keyboard.moveDown(sp));
         const state = store.getState();
         // const { keyboard: pos, mesh } = state;
@@ -118,22 +117,30 @@ export const keyDownHandler = (e: { code: string }) => {
   }
 };
 
-function run() :Function {
+// 简易移动端适配
+function init() {
+  let width = document.body.clientWidth || window.screen.width;
+  let height = document.body.clientHeight || window.screen.height;
+
+  if (!width || !height) return;
+  const small = Math.min(width, height);
+  if(small < 750) {
+    const html = document.querySelector("html");
+    html!.style.fontSize = (small / 600) * 16 + "px";
+  }
+}
+
+function run(): Function {
+  init()
+
   let lock = false;
   let id: number | undefined;
 
   const handleKeyDown = (e: KeyboardEvent) => {
-    // if (e.code === "Space") {
-    //   drop = true;
-    //   while (drop) {
-    //     keyDownHandler({ code: "ArrowDown" });
-    //   }
-    // } else {
-    // }
     lock = true;
     keyDownHandler(e);
   }
-  
+
   const handleKeyUp = (e: KeyboardEvent) => {
     if (lock) {
       lock = false;

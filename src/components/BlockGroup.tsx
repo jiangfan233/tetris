@@ -40,17 +40,17 @@ const StyledBlock = styled.div`
   width: 1rem;
   position: absolute;
   z-index: ${(props: StyledBlockProps) => props.value};
-  border: ${(props: StyledBlockProps) => `2px solid ${BlockColorMap[props.bgType as BlockColor]}`};
+  border: ${(props: StyledBlockProps) => `0.15rem solid ${BlockColorMap[props.bgType as BlockColor]}`};
   left: ${(props: StyledBlockProps) => `${props.xOffset}rem`};
   top: ${(props: StyledBlockProps) => `${props.yOffset}rem`};
 
   &::after{
     content: "";
     position: absolute;
-    height: 0.5rem;
-    width: 0.5rem;
-    top: calc(0.25rem - 2px);
-    left: calc(0.25rem - 2px);
+    height: 0.6rem;
+    width: 0.6rem;
+    top: calc(50%  - 0.3rem);
+    left: calc(50%  - 0.3rem);
     background-color: ${(props: StyledBlockProps) => `${BlockColorMap[props.bgType as BlockColor]}`};
   }
 `;
@@ -73,8 +73,8 @@ export const BlockGroup = ({
   return (
     <StyledBlockGroup x={x} y={y} angle={angle}>
       {blocks.map((block, index) => (
-          <Block key={index} xOffset={block.xOffset} yOffset={block.yOffset} bgType={bgType as string} />
-        ))}
+        <Block key={index} xOffset={block.xOffset} yOffset={block.yOffset} bgType={bgType as string} />
+      ))}
     </StyledBlockGroup>
   );
 };

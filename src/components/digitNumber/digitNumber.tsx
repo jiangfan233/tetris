@@ -7,6 +7,7 @@ const Ul = styled.ul`
   justify-content: right;
   padding: 0 0.2rem;
   border: 0.2rem inset black;
+  width: 100%;
 `;
 
 export const DigitNumberGroup = ({ value: num }: { value: number }) => {

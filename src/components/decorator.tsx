@@ -1,13 +1,12 @@
 import styled from "styled-components"
 import React from "react"
 import { Row } from "./common"
-import { ButtonGroup } from "./button/buttonGroup"
+import { LeftButtons, RightButtons } from "./button/buttonGroup"
 
 
 
 const Div = styled.div`
   padding: 1rem;
-  min-width: 20rem;
   border-radius: 1rem;
   background-color: #161515;
 `
@@ -30,11 +29,8 @@ const P = styled.p`
 
 
 const Border = styled.div.attrs({
-  className: "bg-orange-300"
+  className: "bg-orange-300 p-8 landscape:flex items-center justify-between min-w-fit px-20  landscape:rounded-full  portrait:pb-20 portrait:rounded-2xl"
 })`
-  padding: 2rem;
-  padding-bottom: 5rem;
-  border-radius: 2rem;
   color: #ccb07c;
   box-shadow: 0.4rem 0.4rem 1rem black, 0.3rem 0.3rem 0.5rem inset #e6e3df;
 `
@@ -42,6 +38,7 @@ const Border = styled.div.attrs({
 export const Decorator = ({ children: BlockContainer }: { children: React.ReactNode }) => {
   return (
     <Border>
+      <LeftButtons />
       <Div>
         <Row style={{ alignItems: "start" }}>
           {BlockContainer}
@@ -50,8 +47,12 @@ export const Decorator = ({ children: BlockContainer }: { children: React.ReactN
           <P>Just like the old good days~</P>
         </Row>
       </Div>
+      <RightButtons />
 
-      <ButtonGroup />
+      <div className="flex items-center portrait:gap-x-40 mt-20 landscape:hidden">
+        <LeftButtons isPortrait={true} />
+        <RightButtons isPortrait={true} />
+      </div>
     </Border>
   )
 }

@@ -12,14 +12,16 @@ const StyledButton = styled.button`
   width: ${(props: StyledButtonProps) => props.size === "large" ? "6rem" : "4rem"};
   rotate: ${(props: StyledButtonProps) => props.size === "small" ? "-45deg" : 0};
   border-radius: 50%;
-  background-color: #3d86a3;
+  background-color: #4d9cbb;
   cursor: pointer;
   box-shadow: 0.3rem 0.3rem 0.5rem inset skyblue, 0.2rem 0.2rem 0.3rem black;
-  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
   &:active {
     background-color: #347088;
-    box-shadow: 0.3rem 0.3rem 0.5rem inset #58a7c7, 0.4rem 0.4rem 0.8rem black;
+    box-shadow: 0.3rem 0.3rem 0.5rem inset #58a7c7, 0.2rem 0.2rem 0.4rem black;
   }
 `
 
@@ -33,6 +35,9 @@ type ButtonProps = {
 export const Button = ({ size = "large", children, type, onClick }: ButtonProps) => {
 
   return (
-    <StyledButton onClick={() => { onClick(type) }} size={size}>{children}</StyledButton>
+    <StyledButton onClick={() => { onClick(type) }} size={size}>
+      {children}
+
+    </StyledButton>
   )
 }
