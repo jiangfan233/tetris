@@ -4,7 +4,7 @@ export interface Shape {
   yOffset: number;
 }
 
-export type ShapeType = "T" | "L" | "J" | "I";
+export type ShapeType = "T" | "L" | "J" | "I" | "Z" | "O" | "!Z";
 
 export type ShapeProperties = {
   blocks: Shape[],
@@ -55,7 +55,30 @@ export const ShapeConfig :ShapeConfigType = {
       { xOffset: 0.5, yOffset: -1 },
       { xOffset: -0.5, yOffset: 0 },
     ],
-    
+  },
+  "Z": {
+    blocks: [
+      { xOffset: -1, yOffset: 0.5 },
+      { xOffset: 0, yOffset: 0.5 },
+      { xOffset: -1, yOffset: -0.5 },
+      { xOffset: 0, yOffset: 1.5 },
+    ]
+  },
+  "O": {
+    blocks: [
+      { xOffset: -1, yOffset: -1 },
+      { xOffset: -1, yOffset: 0 },
+      { xOffset: 0, yOffset: -1 },
+      { xOffset: 0, yOffset: 0 },
+    ]
+  },
+  "!Z": {
+    blocks: [
+      { xOffset: -1, yOffset: 0.5 },
+      { xOffset: 0, yOffset: 0.5 },
+      { xOffset: -1, yOffset: 1.5 },
+      { xOffset: 0, yOffset: -0.5 },
+    ]
   },
 }
 
@@ -82,4 +105,4 @@ const generateInfoForShape = (ShapeConfig: ShapeConfigType) => {
 
 
 const shapes = Object.keys(generateInfoForShape(ShapeConfig));
-export const genetateShape = () => shapes[Math.floor(Math.random() * (shapes.length-1))] as ShapeType;
+export const genetateShape = () => shapes[Math.trunc(Math.random() * (shapes.length))] as ShapeType;

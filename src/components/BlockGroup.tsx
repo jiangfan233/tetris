@@ -2,7 +2,7 @@ import styled from "styled-components";
 import { ShapeConfig, ShapeType } from "./ShapeConfig";
 import { BlockColor, BlockColorMap } from "../config";
 import { connect } from "react-redux";
-import { isDecimal } from "../utils/scan";
+import { getPoints } from "../utils";
 
 type StyledBlockGroupProps = {
   x: number;
@@ -13,6 +13,7 @@ type StyledBlockGroupProps = {
 };
 
 type BlockProps = {
+  posY: number,
   xOffset: number;
   yOffset: number;
   bgType: string,
@@ -27,6 +28,7 @@ type BlockGroupProps = {
   y: number;
   angle: number;
   shape: ShapeType;
+  pos: any
 };
 
 const StyledBlockGroup = styled.div`
@@ -46,6 +48,7 @@ const StyledBlock = styled.div`
   border: ${(props: StyledBlockProps) => `0.15rem solid ${BlockColorMap[props.bgType as BlockColor]}`};
   left: ${(props: StyledBlockProps) => `${props.xOffset}rem`};
   top: ${(props: StyledBlockProps) => `${props.yOffset}rem`};
+  display: ${(props: StyledBlockProps) => props.posY < 0 ? `none` : ""};
 
   &::after{
     content: "";
@@ -58,8 +61,8 @@ const StyledBlock = styled.div`
   }
 `;
 
-export const Block = ({ xOffset, yOffset, bgType, value }: BlockProps) => {
-  return <StyledBlock xOffset={xOffset} yOffset={yOffset} bgType={bgType} value={value}></StyledBlock>;
+export const Block = ({ posY, xOffset, yOffset, bgType, value }: BlockProps) => {
+  return <StyledBlock posY={posY} xOffset={xOffset} yOffset={yOffset} bgType={bgType} value={value}></StyledBlock>;
 };
 
 export const BlockGroup = ({
@@ -68,15 +71,17 @@ export const BlockGroup = ({
   y,
   angle,
   shape,
+  pos
 }: BlockGroupProps) => {
 
   const config = ShapeConfig[shape];
   const { blocks, bgType, height, width } = config;
+  const blockPosArr = getPoints(pos, config);
 
   return (
     <StyledBlockGroup x={x} y={y} angle={angle} height={height!} width={width!}>
       {blocks.map((block, index) => (
-        <Block key={index} xOffset={block.xOffset} yOffset={block.yOffset} bgType={bgType as string} />
+        <Block key={index} posY={blockPosArr[index].y} xOffset={block.xOffset} yOffset={block.yOffset} bgType={bgType as string} />
       ))}
     </StyledBlockGroup>
   );
@@ -89,6 +94,7 @@ const mapStateToProps = (state) => {
     y: state.keyboard.y,
     angle: state.keyboard.angle,
     shape: state.keyboard.shape,
+    pos: state.keyboard,
   };
 };
 
