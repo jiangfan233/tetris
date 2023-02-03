@@ -32,8 +32,10 @@ export const MeshReducer = (
     case BATCH_OCCUPY:
       return produce(state, (draft: MeshState) => {
         action.points!.forEach((point) => {
-          draft.points[point.x][point.y].val = 1;
-          draft.points[point.x][point.y].bgType = "1";
+          if(draft.points[point.x] && draft.points[point.x][point.y]) {
+            draft.points[point.x][point.y].val = 1;
+            draft.points[point.x][point.y].bgType = "1";
+          }
         });
       });
 

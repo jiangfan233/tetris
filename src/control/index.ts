@@ -68,7 +68,7 @@ export const keyDownHandler = (e: { code: string }) => {
       return;
     case keyboard.ArrowLeft:
       // 如果新的方块组未进入视野，不作操作
-      if(getPoints(pos, shapeProperties).every(point => point.y < 0)) return;
+      if (getPoints(pos, shapeProperties).every(point => point.y < 0)) return;
       if (scan(pos, shapeProperties, mesh!, keyboard.ArrowLeft as Direction)) {
         console.log("到最左侧了");
         // @ts-ignore
@@ -79,7 +79,7 @@ export const keyDownHandler = (e: { code: string }) => {
       return;
     case keyboard.ArrowRight:
       // 如果新的方块组未进入视野，不作操作
-      if(getPoints(pos, shapeProperties).every(point => point.y < 0)) return;
+      if (getPoints(pos, shapeProperties).every(point => point.y < 0)) return;
       if (scan(pos, shapeProperties, mesh!, keyboard.ArrowRight as Direction)) {
         console.log("到最右侧了");
         // @ts-ignore
@@ -90,7 +90,7 @@ export const keyDownHandler = (e: { code: string }) => {
       return;
     case keyboard.ArrowUp:
       // 如果新的方块组未进入视野，不作操作
-      if(getPoints(pos, shapeProperties).every(point => point.y < 0)) return;
+      if (getPoints(pos, shapeProperties).every(point => point.y < 0)) return;
       if (
         maybeRotate(pos, shapeProperties, mesh)
       ) {
@@ -109,12 +109,19 @@ export const keyDownHandler = (e: { code: string }) => {
       let m = mesh;
 
       while (!scan(p, sp, m!, keyboard.ArrowDown as Direction)) {
+        console.log("drop")
         store.dispatch(keyboard.moveDown(sp));
         const state = store.getState();
         p = state.keyboard;
-        m = state.mesh;
-        sp = ShapeConfig[pos.shape as ShapeType];
+        // m = state.mesh;
+        // sp = ShapeConfig[pos.shape as ShapeType];
       }
+      // 批量占据方块
+      store.dispatch(
+        meshActions.batchOccupy(getPoints(p, shapeProperties))
+      );
+      // 分配新的方块组
+      store.dispatch(keyboard.reset(shapeProperties));
       return;
     default:
       return;
