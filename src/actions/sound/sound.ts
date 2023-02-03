@@ -1,7 +1,7 @@
 import { WARNING, SUCCESS, FAILURE, type SoundType } from "./types";
-import warningMp3 from "../../../public/static/warning.mp3";
-import failureMp3 from "../../../public/static/failure.mp3";
-import successMp3 from "../../../public/static/success.mp3"
+import warningMp3 from "/src/static/warning.mp3";
+import failureMp3 from "/src/static/failure.mp3";
+import successMp3 from "/src/static/success.mp3"
 
 // 使用 Web Audio API
 const AudioContext = window.AudioContext;
@@ -38,13 +38,18 @@ export const requestAudio = async (type: SoundType) => {
     console.error(e);
   }
   req.onload = () => {
-    const context = new AudioContext();
-    context.decodeAudioData(req.response, buf => {
-      AudioCache[type] = () => {
-        const source = context.createBufferSource();
-        source.buffer = buf;
-        source.connect(context.destination);
-        return source;
+    const audioContext = new AudioContext();
+    audioContext.decodeAudioData(req.response, buf => {
+      AudioCache[type] = (volumeNum: number) => {
+        
+        const sourceNode = audioContext.createBufferSource();
+        sourceNode.buffer = buf;
+        const gainNode = audioContext.createGain();
+        sourceNode.connect(gainNode);
+        gainNode.connect(audioContext.destination);
+    
+        gainNode.gain.value = volumeNum * 0.2;
+        return sourceNode;
       };
     })
   }

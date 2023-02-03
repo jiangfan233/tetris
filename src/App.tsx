@@ -5,6 +5,8 @@ import { Container } from "./components/Container";
 import "./control/index"
 import { GlobalScore } from "./components/details/score";
 import { Decorator } from "./components/decorator"
+import { GlobalVolume } from "./components/details/volume";
+import { GlobalRank } from "./components/details/rank";
 
 
 const StyledApp = styled.div`
@@ -22,6 +24,7 @@ const Col = styled.div`
   align-items: center;
   justify-content: start;
   height: 100%;
+  gap: 1rem;
 `
 
 
@@ -29,13 +32,14 @@ function App() {
 
   return (
     <StyledApp className="text-xxm xs:text-xs sm:text-sm md:text-base">
-      <div className="m-6 font-bold" style={{fontSize: "20px"}}>建议调低音量；音量、等级功能暂未添加...</div>
       <Decorator>
         <Container>
           <GlobalBlockGroup />
         </Container>
         <Col>
           <GlobalScore />
+          <GlobalVolume />
+          <GlobalRank />
         </Col>
       </Decorator>
     </StyledApp>

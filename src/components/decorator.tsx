@@ -29,7 +29,7 @@ const P = styled.p`
 
 
 const Border = styled.div.attrs({
-  className: "bg-orange-300 p-8 landscape:flex items-center justify-between min-w-fit px-20  landscape:rounded-full  portrait:pb-20 portrait:rounded-2xl"
+  className: "bg-orange-300 p-8 px-10 landscape:flex items-center justify-between min-w-fit  landscape:rounded-full  portrait:pb-20 portrait:rounded-2xl"
 })`
   color: #ccb07c;
   box-shadow: 0.4rem 0.4rem 1rem black, 0.3rem 0.3rem 0.5rem inset #e6e3df;

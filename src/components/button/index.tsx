@@ -1,15 +1,26 @@
+import { connect } from "react-redux";
 import styled from "styled-components"
 import { Keys } from "../../actions/keyboard";
 
-type ButtonSize = "large" | "small";
+export const Volume = "Volume";
+export const Rank = "Rank";
+export type Types = Keys | typeof Volume | typeof Rank;
+
+type ButtonSize = "large" | "small" | "mini";
 
 type StyledButtonProps = {
   size: ButtonSize
 }
 
+const ButtonSizeMap = {
+  large: "6rem",
+  small: "4rem",
+  mini: "2rem",
+}
+
 const StyledButton = styled.button`
-  height: ${(props: StyledButtonProps) => props.size === "large" ? "6rem" : "4rem"};
-  width: ${(props: StyledButtonProps) => props.size === "large" ? "6rem" : "4rem"};
+  height: ${(props: StyledButtonProps) => ButtonSizeMap[props.size]};
+  width: ${(props: StyledButtonProps) => ButtonSizeMap[props.size]};
   rotate: ${(props: StyledButtonProps) => props.size === "small" ? "-45deg" : 0};
   border-radius: 50%;
   background-color: #4d9cbb;
@@ -28,7 +39,7 @@ const StyledButton = styled.button`
 type ButtonProps = {
   size: ButtonSize,
   children: React.ReactNode,
-  type: Keys,
+  type: Types,
   onClick: Function
 }
 

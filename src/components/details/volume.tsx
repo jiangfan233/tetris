@@ -4,7 +4,7 @@ import { DigitNumberGroup } from "../digitNumber/digitNumber";
 
 type Props = {
   dispatch?: Function;
-  score: number;
+  volume: number;
 };
 
 const P = styled.p.attrs({
@@ -13,17 +13,17 @@ const P = styled.p.attrs({
   color: white;
 `
 
-export const Score = ({ dispatch, score }: Props) => {
+export const Volume = ({ dispatch, volume }: Props) => {
   return (<div className="w-full">
-    <P>Score:</P>
-    <DigitNumberGroup value={score}></DigitNumberGroup>
+    <P>Volume:</P>
+    <DigitNumberGroup value={volume}></DigitNumberGroup>
   </div>)
 }
 // @ts-ignore
 const mapStateToProps = (state) => {
   return {
-    score: state.score
+    volume: state.volume
   }
 }
 
-export const GlobalScore = connect(mapStateToProps)(Score); 
+export const GlobalVolume = connect(mapStateToProps)(Volume);

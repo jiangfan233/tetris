@@ -49,7 +49,7 @@ export const keyDownHandler = (e: { code: string }) => {
           console.log("游戏结束");
           stop();
           // @ts-ignore
-          return store.dispatch(playSound(FAILURE));
+          return store.dispatch(playSound(FAILURE, state.volume));
         }
 
         // 批量占据方块
@@ -76,7 +76,7 @@ export const keyDownHandler = (e: { code: string }) => {
       if (scan(pos, shapeProperties, mesh!, keyboard.ArrowLeft as Direction)) {
         console.log("到最左侧了");
         // @ts-ignore
-        store.dispatch(playSound(WARNING));
+        store.dispatch(playSound(WARNING, state.volume));
       } else {
         store.dispatch(keyboard.moveLeft(shapeProperties));
       }
@@ -87,7 +87,7 @@ export const keyDownHandler = (e: { code: string }) => {
       if (scan(pos, shapeProperties, mesh!, keyboard.ArrowRight as Direction)) {
         console.log("到最右侧了");
         // @ts-ignore
-        store.dispatch(playSound(WARNING));
+        store.dispatch(playSound(WARNING, state.volume));
       } else {
         store.dispatch(keyboard.moveRight(shapeProperties));
       }
@@ -101,7 +101,7 @@ export const keyDownHandler = (e: { code: string }) => {
         // 不可旋转
         console.log("不可旋转");
         // @ts-ignore
-        store.dispatch(playSound(WARNING));
+        store.dispatch(playSound(WARNING, state.volume));
       } else {
         store.dispatch(keyboard.rotate(shapeProperties));
       }
@@ -158,17 +158,32 @@ function init() {
 
   if (!width) return;
   if (width < 750) {
-    html!.style.fontSize = Math.floor(width / 600 * 16) + "px";
+    html!.style.fontSize = Math.floor(width / 500 * 16) + "px";
   }
 }
 
-function run(): Function {
+export function runTimer(rank: number) {
+  const internal = Math.ceil(1000 / rank)
+  let id = window.setInterval(() => {
+    keyDownHandler({ code: "ArrowDown" });
+  }, internal);
+
+  return {
+    id,
+    stop() { clearInterval(id) },
+    reRun(rank: number) {
+      clearInterval(id);
+      id = runTimer(rank).id;
+    },
+  }
+}
+
+export function run() {
   init()
   const fn = debounce(init, 300);
   window.addEventListener("resize", () => fn());
 
   let lock = false;
-  let id: number | undefined;
 
   const handleKeyDown = (e: KeyboardEvent) => {
     lock = true;
@@ -183,17 +198,18 @@ function run(): Function {
 
   document.addEventListener("keydown", handleKeyDown);
   document.addEventListener("keyup", handleKeyUp);
-  id = window.setInterval(() => {
-    keyDownHandler({ code: "ArrowDown" });
-  }, 1000);
+  const timer = runTimer(store.getState().rank);
 
-  return () => {
-    clearInterval(id);
-    document.removeEventListener("keydown", handleKeyDown);
-    document.removeEventListener("keyup", handleKeyUp);
-    window.removeEventListener("resize", init);
+  return {
+    reRunTimer: timer.reRun,
+    stop() {
+      timer.stop();
+      document.removeEventListener("keydown", handleKeyDown);
+      document.removeEventListener("keyup", handleKeyUp);
+      window.removeEventListener("resize", init);
+    },
   }
 }
 
 
-const stop = run();
+export const { stop, reRunTimer } = run();
