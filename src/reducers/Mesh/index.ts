@@ -46,7 +46,10 @@ export const MeshReducer = (
         const start = action.rows![0];
         draft.points.forEach(col => {
           col.splice(start, len);
-          col.unshift(...Array(len).fill(0).map(item => ({ val: 0, bgType: "0" })));
+          col.unshift(...Array(len).fill(0)
+            .map((item, index) => ({ posY: index, val: 0, bgType: "0" }))
+            .reverse()
+          );
         })
       });
 

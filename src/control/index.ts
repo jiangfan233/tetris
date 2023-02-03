@@ -11,6 +11,30 @@ import { Sound } from "../actions/sound";
 
 const { FAILURE, SUCCESS, WARNING, playSound } = Sound;
 
+const shineRowsAndUpdateScore = (needLiberateRows: number[], shineInterval: number, shineCount: number) => {
+  // 行闪烁,可使用css实现
+  let count = 0;
+  store.dispatch(meshActions.shineRows(needLiberateRows, "2"));
+  let id = setInterval(() => {
+    store.dispatch(meshActions.shineRows(needLiberateRows, count % 2 ? "2" : "1"));
+    count++;
+    if (count >= shineCount - 1) clearInterval(id);
+  }, shineInterval);
+
+  let id2 = setTimeout(() => {
+    // 批量消除行
+    store.dispatch(meshActions.batchLiberateRows(needLiberateRows, "0"));
+    // 更新分数
+    store.dispatch(
+      score.updateScore(
+        needLiberateRows.length,
+        false
+      )
+    );
+    clearTimeout(id2);
+  }, shineCount * shineInterval + 50);
+}
+
 export const keyDownHandler = (e: { code: string }) => {
   const state = store.getState();
   const { keyboard: pos, mesh } = state;
@@ -37,27 +61,7 @@ export const keyDownHandler = (e: { code: string }) => {
         // 检测是否需要消除
         const needLiberateRows = needLibeate(store.getState().mesh);
         if (needLiberateRows.length > 0) {
-          // 行闪烁,可使用css实现
-          let count = 0;
-          store.dispatch(meshActions.shineRows(needLiberateRows, "2"));
-          let id = setInterval(() => {
-            store.dispatch(meshActions.shineRows(needLiberateRows, count % 2 ? "2" : "1"));
-            count++;
-            if (count >= 2) clearInterval(id);
-          }, 300);
-
-          let id2 = setTimeout(() => {
-            // 批量消除行
-            store.dispatch(meshActions.batchLiberateRows(needLiberateRows, "0"));
-            // 更新分数
-            store.dispatch(
-              score.updateScore(
-                needLiberateRows.length,
-                false
-              )
-            );
-            clearTimeout(id2);
-          }, 900);
+          shineRowsAndUpdateScore(needLiberateRows, 300, 3);
         }
 
         // 分配新的方块组
@@ -109,17 +113,21 @@ export const keyDownHandler = (e: { code: string }) => {
       let m = mesh;
 
       while (!scan(p, sp, m!, keyboard.ArrowDown as Direction)) {
-        console.log("drop")
         store.dispatch(keyboard.moveDown(sp));
         const state = store.getState();
         p = state.keyboard;
-        // m = state.mesh;
-        // sp = ShapeConfig[pos.shape as ShapeType];
       }
       // 批量占据方块
       store.dispatch(
         meshActions.batchOccupy(getPoints(p, shapeProperties))
       );
+
+      // 检测是否需要消除
+      const needLiberateRows = needLibeate(store.getState().mesh);
+      if (needLiberateRows.length > 0) {
+        // debugger
+        shineRowsAndUpdateScore(needLiberateRows, 300, 3);
+      }
       // 分配新的方块组
       store.dispatch(keyboard.reset(shapeProperties));
       return;
