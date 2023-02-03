@@ -44,7 +44,7 @@ export const Decorator = ({ children: BlockContainer }: { children: React.ReactN
           {BlockContainer}
         </Row>
         <Row>
-          <P>Just like the old good days~</P>
+          <P>Just like the good old days~</P>
         </Row>
       </Div>
       <RightButtons />

@@ -6,8 +6,7 @@ import React from "react"
 
 const StyledContainer = styled.div.attrs({})`
   box-sizing: content-box;
-  border: 0.5rem solid #d2cfcf;
-  border-style: inset;
+  border: 0.5rem inset #d2cfcf;
   height: ${MeshConfig.height}rem;
   width: ${MeshConfig.width}rem;
   background-color: white;

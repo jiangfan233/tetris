@@ -76,15 +76,26 @@ export const keyBoardReducer = (
         // 处理旋转之后的坐标是小数问题
         let fixX = 0;
         let fixY = 0;
-        switch(draft.angle % 2) {
+        switch(draft.angle) {
           case 0:
+            fixX = isDecimal(width / 2 + x) ? -0.5 : 0;
+            fixY = isDecimal(height / 2 + y) ? -0.5 : 0;
+            break;
+    
+          case 1:
+            fixX = isDecimal(height / 2 + x) ? 0.5 : 0;
+            fixY = isDecimal(width / 2 + y) ? -0.5 : 0;
+            break;
+
+          case 2:
             fixX = isDecimal(width / 2 + x) ? 0.5 : 0;
             fixY = isDecimal(height / 2 + y) ? 0.5 : 0;
             break;
-    
-          default:
-            fixX = isDecimal(height / 2 + x) ? 0.5 : 0;
+
+          case 3:
+            fixX = isDecimal(height / 2 + x) ? -0.5 : 0;
             fixY = isDecimal(width / 2 + y) ? 0.5 : 0;
+            break;
         }
         draft.x += fixX;
         draft.y += fixY;

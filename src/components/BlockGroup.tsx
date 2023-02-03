@@ -2,11 +2,14 @@ import styled from "styled-components";
 import { ShapeConfig, ShapeType } from "./ShapeConfig";
 import { BlockColor, BlockColorMap } from "../config";
 import { connect } from "react-redux";
+import { isDecimal } from "../utils/scan";
 
 type StyledBlockGroupProps = {
   x: number;
   y: number;
   angle: number;
+  height: number;
+  width: number;
 };
 
 type BlockProps = {
@@ -68,10 +71,10 @@ export const BlockGroup = ({
 }: BlockGroupProps) => {
 
   const config = ShapeConfig[shape];
-  const { blocks, bgType } = config;
+  const { blocks, bgType, height, width } = config;
 
   return (
-    <StyledBlockGroup x={x} y={y} angle={angle}>
+    <StyledBlockGroup x={x} y={y} angle={angle} height={height!} width={width!}>
       {blocks.map((block, index) => (
         <Block key={index} xOffset={block.xOffset} yOffset={block.yOffset} bgType={bgType as string} />
       ))}
