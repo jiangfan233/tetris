@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import GlobalBlockGroup from "./components/BlockGroup";
-import { Container } from "./components/Container";
+import { Container, GlobalContainer } from "./components/Container";
 import "./control/index"
 import { GlobalScore } from "./components/details/score";
 import { Decorator } from "./components/decorator"
@@ -33,9 +33,9 @@ function App() {
   return (
     <StyledApp className="text-xxm xs:text-xs sm:text-sm md:text-base">
       <Decorator>
-        <Container>
+        <GlobalContainer>
           <GlobalBlockGroup />
-        </Container>
+        </GlobalContainer>
         <Col>
           <GlobalScore />
           <GlobalVolume />

@@ -1,4 +1,3 @@
-import { connect } from "react-redux";
 import styled from "styled-components"
 import { Keys } from "../../actions/keyboard";
 

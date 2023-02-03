@@ -3,6 +3,7 @@ import {
   PointAction,
   BATCH_LIBERATE_ROWS,
   SHINE_ROWS,
+  RESET,
 } from "../../actions/Mesh";
 import { Mesh as MeshConfig } from "../../config";
 import produce from "immer";
@@ -62,6 +63,9 @@ export const MeshReducer = (
           })
         })
       })
+    
+    case RESET:
+      return initialState
 
     default:
       return state;

@@ -7,9 +7,11 @@ import { getPoints, maybeRotate, needLibeate } from "../utils/index";
 import { keyboard } from "../actions/keyboard";
 import { score } from "../actions/score";
 import { Sound } from "../actions/sound";
+import { game, GameStatus } from "../actions/game";
 
 
 const { FAILURE, SUCCESS, WARNING, playSound } = Sound;
+const { gameActionCreator, Stop } = game;
 
 const shineRowsAndUpdateScore = (needLiberateRows: number[], shineInterval: number, shineCount: number) => {
   // 行闪烁,可使用css实现
@@ -47,9 +49,9 @@ export const keyDownHandler = (e: { code: string }) => {
         // 最顶层有1，有方块了，游戏结束
         if (mesh.points.some((col) => col[1].val === 1)) {
           console.log("游戏结束");
-          stop();
           // @ts-ignore
-          return store.dispatch(playSound(FAILURE, state.volume));
+          store.dispatch(playSound(FAILURE, state.volume));
+          store.dispatch(gameActionCreator(Stop as GameStatus))
         }
 
         // 批量占据方块
@@ -178,7 +180,12 @@ export function runTimer(rank: number) {
   }
 }
 
-export function run() {
+export type AfterRun = {
+  reRunTimer: Function,
+  stop: Function,
+}
+
+export function run(rank: number = 1) {
   init()
   const fn = debounce(init, 300);
   window.addEventListener("resize", () => fn());
@@ -186,6 +193,9 @@ export function run() {
   let lock = false;
 
   const handleKeyDown = (e: KeyboardEvent) => {
+    // 取消按键的默认事件
+    // 比如：空格键默认执行上一次鼠标点击事件
+    e.preventDefault();
     lock = true;
     keyDownHandler(e);
   }
@@ -198,7 +208,7 @@ export function run() {
 
   document.addEventListener("keydown", handleKeyDown);
   document.addEventListener("keyup", handleKeyUp);
-  const timer = runTimer(store.getState().rank);
+  const timer = runTimer(rank);
 
   return {
     reRunTimer: timer.reRun,
@@ -212,4 +222,4 @@ export function run() {
 }
 
 
-export const { stop, reRunTimer } = run();
+// export const { stop, reRunTimer } = run();

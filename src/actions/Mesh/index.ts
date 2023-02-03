@@ -18,13 +18,17 @@ export const BATCH_LIBERATE_ROWS = "BATCH_LIBERATE_ROWS";
 // 行闪烁
 export const SHINE_ROWS = "SHINE_ROWS";
 
+// 重置
+export const RESET = "RESET";
+
 export type PointActionType =
   | typeof OCCUPY
   | typeof LIBERATE
   | typeof BATCH_OCCUPY
   | typeof BATCH_LIBERATE
   | typeof BATCH_LIBERATE_ROWS
-  | typeof SHINE_ROWS;
+  | typeof SHINE_ROWS
+  | typeof RESET;
 
 export type Point = {
   x: number;
@@ -38,7 +42,7 @@ export interface PointAction {
   bgType?: BlockColor
 }
 
-type PointActionCreator = (points: Point[]) => PointAction;
+type PointActionCreator = (points?: Point[]) => PointAction;
 type RowActionCreator = (rows: number[], bgType: BlockColor) => PointAction;
 
 export type MeshActionCreator = PointActionCreator | RowActionCreator;
@@ -61,7 +65,7 @@ export const shineRows: RowActionCreator = (rows: number[], bgType: BlockColor) 
 };
 
 // 批量占据
-export const batchOccupy: PointActionCreator = (points: Point[]) => {
+export const batchOccupy: PointActionCreator = (points) => {
   return {
     type: BATCH_OCCUPY,
     points: points,
@@ -69,12 +73,19 @@ export const batchOccupy: PointActionCreator = (points: Point[]) => {
 };
 
 // 批量解放
-export const batchLiberate: PointActionCreator = (points: Point[]) => {
+export const batchLiberate: PointActionCreator = (points) => {
   return {
     type: BATCH_LIBERATE,
     points: points,
   };
 };
+
+export const resetMesh : PointActionCreator = () => {
+  return {
+    type: RESET,
+  }
+
+}
 
 
 export const mesh = {
@@ -86,4 +97,6 @@ export const mesh = {
   batchLiberateRows,
   SHINE_ROWS,
   shineRows,
+  resetMesh,
+  RESET
 };

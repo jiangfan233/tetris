@@ -24,7 +24,7 @@ type InitPosition = () => BlockGroupPosition;
 const initPosition: InitPosition = () => {
   const shapeType: ShapeType = genetateShape();
   // const shapeType = "L";
-  const { height, width, center } = ShapeConfig[shapeType as ShapeType];
+  const { center } = ShapeConfig[shapeType as ShapeType];
 
   let x = MeshConfig.width / 2;
   switch (shapeType) {

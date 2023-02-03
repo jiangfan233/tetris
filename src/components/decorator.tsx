@@ -1,7 +1,7 @@
 import styled from "styled-components"
 import React from "react"
 import { Row } from "./common"
-import { LeftButtons, RightButtons } from "./button/buttonGroup"
+import { LeftButtons, RightButtons, GlobalLeftButtons } from "./button/buttonGroup"
 
 
 
@@ -38,7 +38,7 @@ const Border = styled.div.attrs({
 export const Decorator = ({ children: BlockContainer }: { children: React.ReactNode }) => {
   return (
     <Border>
-      <LeftButtons />
+      <GlobalLeftButtons />
       <Div>
         <Row style={{ alignItems: "start" }}>
           {BlockContainer}
@@ -50,7 +50,7 @@ export const Decorator = ({ children: BlockContainer }: { children: React.ReactN
       <RightButtons />
 
       <div className="flex items-center portrait:gap-x-40 mt-20 landscape:hidden">
-        <LeftButtons isPortrait={true} />
+        <GlobalLeftButtons isPortrait={true} />
         <RightButtons isPortrait={true} />
       </div>
     </Border>

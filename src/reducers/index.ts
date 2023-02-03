@@ -1,4 +1,5 @@
 import { combineReducers } from "redux";
+import { gameReducer } from "./game";
 import { keyBoardReducer } from "./keyboard";
 import { MeshReducer } from "./Mesh";
 import { rankReducer } from "./rank";
@@ -15,4 +16,5 @@ export const RootReducer = combineReducers({
   sound: soundReducer,
   volume: volumnReducer,
   rank: rankReducer,
+  game: gameReducer,
 })
