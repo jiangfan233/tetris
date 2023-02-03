@@ -105,4 +105,4 @@ gap: 0.5rem;
   align-items: center;
   justify-content: start;
   height: 100%;
-`;function zr(){return(0,c.jsxs)(Tr,Object.assign({className:"text-xxm xs:text-xs sm:text-sm md:text-base"},{children:[(0,c.jsx)("div",Object.assign({className:"m-6 font-bold",style:{fontSize:"20px"}},{children:"建议调低音量；此项目仍在开发中，存在不少bug。。。"})),(0,c.jsxs)(Nr,{children:[(0,c.jsx)(Ut,{children:(0,c.jsx)(Mt,{})}),(0,c.jsx)(Rr,{children:(0,c.jsx)(Vt,{})})]})]}))}L.createRoot(document.getElementById("root")).render((0,c.jsx)(le,Object.assign({store:j},{children:(0,c.jsx)(zr,{})})))})()})();
+`;function zr(){return(0,c.jsxs)(Tr,Object.assign({className:"text-xxm xs:text-xs sm:text-sm md:text-base"},{children:[(0,c.jsx)("div",Object.assign({className:"m-6 font-bold",style:{fontSize:"20px"}},{children:"建议调低音量；音量、等级功能暂未添加..."})),(0,c.jsxs)(Nr,{children:[(0,c.jsx)(Ut,{children:(0,c.jsx)(Mt,{})}),(0,c.jsx)(Rr,{children:(0,c.jsx)(Vt,{})})]})]}))}L.createRoot(document.getElementById("root")).render((0,c.jsx)(le,Object.assign({store:j},{children:(0,c.jsx)(zr,{})})))})()})();
