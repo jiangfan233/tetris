@@ -1,3 +1,4 @@
+import { BlockColor } from "../../config";
 
 // 占据一个点
 export const OCCUPY = "OCCUPY";
@@ -11,49 +12,91 @@ export const BATCH_OCCUPY = "BATCH_OCCUPY";
 // 批量解放
 export const BATCH_LIBERATE = "BATCH_LIBERATE";
 
+// 解放底部
+export const BATCH_LIBERATE_ROWS = "BATCH_LIBERATE_ROWS";
 
-export type PointActionType = typeof OCCUPY | typeof LIBERATE | typeof BATCH_OCCUPY | typeof BATCH_LIBERATE;
+// 行闪烁
+export const SHINE_ROWS = "SHINE_ROWS";
+
+// 重置
+export const RESET = "RESET";
+
+export type PointActionType =
+  | typeof OCCUPY
+  | typeof LIBERATE
+  | typeof BATCH_OCCUPY
+  | typeof BATCH_LIBERATE
+  | typeof BATCH_LIBERATE_ROWS
+  | typeof SHINE_ROWS
+  | typeof RESET;
 
 export type Point = {
   x: number;
   y: number;
-}
+};
 
 export interface PointAction {
   type: PointActionType;
-  points: Point[];
+  points?: Point[];
+  rows?: number[];
+  bgType?: BlockColor
 }
 
-export type PointActionCreator = (points: Point[]) => {
-  type: PointActionType;
-  points: Point[];
-}
+type PointActionCreator = (points?: Point[]) => PointAction;
+type RowActionCreator = (rows: number[], bgType: BlockColor) => PointAction;
 
-// action creators
-export const occupy = (point: Point) => {
+export type MeshActionCreator = PointActionCreator | RowActionCreator;
+
+// 批量解放行
+export const batchLiberateRows: RowActionCreator = (rows: number[]) => {
   return {
-    type: OCCUPY as PointActionType,
-    payload: point,
-  }
-}
+    type: BATCH_LIBERATE_ROWS,
+    rows,
+  };
+};
 
-export const liberate = (point: Point) => {
+// 行闪烁
+export const shineRows: RowActionCreator = (rows: number[], bgType: BlockColor) => {
   return {
-    type: LIBERATE as PointActionType,
-    payload: point,
-  }
-}
+    type: SHINE_ROWS,
+    rows,
+    bgType,
+  };
+};
 
-export const batchOccupy: PointActionCreator = (points: Point[]) => {
+// 批量占据
+export const batchOccupy: PointActionCreator = (points) => {
   return {
-    type: BATCH_OCCUPY as PointActionType,
+    type: BATCH_OCCUPY,
     points: points,
+  };
+};
+
+// 批量解放
+export const batchLiberate: PointActionCreator = (points) => {
+  return {
+    type: BATCH_LIBERATE,
+    points: points,
+  };
+};
+
+export const resetMesh : PointActionCreator = () => {
+  return {
+    type: RESET,
   }
+
 }
 
-export const batchLiberate: PointActionCreator = (points: Point[]) => {
-  return {
-    type: BATCH_LIBERATE as PointActionType,
-    points: points,
-  }
-}
+
+export const mesh = {
+  BATCH_LIBERATE,
+  BATCH_OCCUPY,
+  batchOccupy,
+  batchLiberate,
+  BATCH_LIBERATE_ROWS,
+  batchLiberateRows,
+  SHINE_ROWS,
+  shineRows,
+  resetMesh,
+  RESET
+};

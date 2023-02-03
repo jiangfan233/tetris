@@ -12,7 +12,6 @@ const StyledBlock = styled.div`
   width: 1rem;
   position: absolute;
   background-color: #f8f6f67e;
-  /* background-image: linear-gradient(red, white); */
   border: 1px solid #0e0b08;
   left: ${(props: styledBlockProps) => `${props.x}rem`};
   top: ${(props: styledBlockProps) => `${props.y}rem`};
@@ -31,6 +30,7 @@ export const Block = ({ dispatch, x, y, angle=0 }: BlockProps) => {
   return <StyledBlock x={x} y={y} angle={angle * 90}></StyledBlock>;
 };
 
+// @ts-ignore
 const mapStateToProps = (state) => {
   return {
     x: state.keyboard.x,

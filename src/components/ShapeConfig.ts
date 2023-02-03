@@ -4,13 +4,14 @@ export interface Shape {
   yOffset: number;
 }
 
-export type ShapeType = "T" | "L" | "J" | "I";
+export type ShapeType = "T" | "L" | "J" | "I" | "Z" | "O" | "!Z";
 
 export type ShapeProperties = {
   blocks: Shape[],
   center?: Shape,
   width?: number,
   height?: number,
+  bgType?: string,
 };
 
 export type ShapeConfigType = {
@@ -54,7 +55,30 @@ export const ShapeConfig :ShapeConfigType = {
       { xOffset: 0.5, yOffset: -1 },
       { xOffset: -0.5, yOffset: 0 },
     ],
-    
+  },
+  "Z": {
+    blocks: [
+      { xOffset: -1, yOffset: 0.5 },
+      { xOffset: 0, yOffset: 0.5 },
+      { xOffset: -1, yOffset: -0.5 },
+      { xOffset: 0, yOffset: 1.5 },
+    ]
+  },
+  "O": {
+    blocks: [
+      { xOffset: -1, yOffset: -1 },
+      { xOffset: -1, yOffset: 0 },
+      { xOffset: 0, yOffset: -1 },
+      { xOffset: 0, yOffset: 0 },
+    ]
+  },
+  "!Z": {
+    blocks: [
+      { xOffset: -1, yOffset: 0.5 },
+      { xOffset: 0, yOffset: 0.5 },
+      { xOffset: -1, yOffset: 1.5 },
+      { xOffset: 0, yOffset: -0.5 },
+    ]
   },
 }
 
@@ -71,15 +95,14 @@ const generateInfoForShape = (ShapeConfig: ShapeConfigType) => {
     info.height = ySet.size;
     info.width = xSet.size;
     info.center = { 
-      // xOffset: Math.floor(info.width / 2), 
-      // yOffset: Math.floor(info.height / 2),
       xOffset: info.width / 2, 
       yOffset: info.height / 2,
     }
+    info.bgType = "1";
   })
   return ShapeConfig;
 }
 
 
 const shapes = Object.keys(generateInfoForShape(ShapeConfig));
-export const genetateShape = () => shapes[Math.floor(Math.random() * (shapes.length-1))] as ShapeType;
+export const genetateShape = () => shapes[Math.trunc(Math.random() * (shapes.length))] as ShapeType;
