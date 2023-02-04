@@ -46,8 +46,9 @@ export const LeftButtons = ({ isPortrait = false, dispatch, game, rank, volume }
             return keyDownHandler({ code: type });
           case Stop:
             dispatch!(mesh.resetMesh());
+            dispatch!(rankAction.increaseRank(1 - rank!, game!));
             dispatch!(score.updateScore(0, true));
-            return dispatch!(gameActionCreator(Start as GameStatus, rank));
+            return dispatch!(gameActionCreator(Start as GameStatus));
           case Continue:
             return dispatch!(gameActionCreator(Continue as GameStatus));
         }
@@ -77,7 +78,7 @@ export const LeftButtons = ({ isPortrait = false, dispatch, game, rank, volume }
   </div>
 }
 
-export const GlobalLeftButtons = connect((state: any) => ({ game: state.game, volume: state.volume }))(LeftButtons);
+export const GlobalLeftButtons = connect((state: any) => ({ game: state.game, volume: state.volume, rank: state.rank }))(LeftButtons);
 
 export const RightButtons = ({ isPortrait = false }: { isPortrait?: boolean }) => {
   return <div className={`flex flex-col items-center gap-6 rotate-45 landscape:ml-10 ${isPortrait ? "" : "portrait:hidden"} `} >
