@@ -14,6 +14,7 @@ const Div = styled.div`
 const P = styled.p`
   font-size: 1.5rem;
   width: 100%;
+  height: 100%;
   text-align: center;
   margin-top: 1.5rem;
   font-family: cursive;

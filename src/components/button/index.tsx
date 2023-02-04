@@ -20,7 +20,7 @@ const ButtonSizeMap = {
 const StyledButton = styled.button`
   height: ${(props: StyledButtonProps) => ButtonSizeMap[props.size]};
   width: ${(props: StyledButtonProps) => ButtonSizeMap[props.size]};
-  rotate: ${(props: StyledButtonProps) => props.size === "small" ? "-45deg" : 0};
+  transform: ${(props: StyledButtonProps) => props.size === "small" ? `rotate(-45deg);` : 0};
   border-radius: 50%;
   background-color: #4d9cbb;
   cursor: pointer;

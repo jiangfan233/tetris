@@ -9,16 +9,21 @@ import { score } from "../actions/score";
 import { Sound } from "../actions/sound";
 import { game, GameStatus } from "../actions/game";
 
-
 const { FAILURE, SUCCESS, WARNING, playSound } = Sound;
 const { gameActionCreator, Stop } = game;
 
-const shineRowsAndUpdateScore = (needLiberateRows: number[], shineInterval: number, shineCount: number) => {
+const shineRowsAndUpdateScore = (
+  needLiberateRows: number[],
+  shineInterval: number,
+  shineCount: number
+) => {
   // 行闪烁,可使用css实现
   let count = 0;
   store.dispatch(meshActions.shineRows(needLiberateRows, "2"));
   let id = setInterval(() => {
-    store.dispatch(meshActions.shineRows(needLiberateRows, count % 2 ? "2" : "1"));
+    store.dispatch(
+      meshActions.shineRows(needLiberateRows, count % 2 ? "2" : "1")
+    );
     count++;
     if (count >= shineCount - 1) clearInterval(id);
   }, shineInterval);
@@ -27,15 +32,10 @@ const shineRowsAndUpdateScore = (needLiberateRows: number[], shineInterval: numb
     // 批量消除行
     store.dispatch(meshActions.batchLiberateRows(needLiberateRows, "0"));
     // 更新分数
-    store.dispatch(
-      score.updateScore(
-        needLiberateRows.length,
-        false
-      )
-    );
+    store.dispatch(score.updateScore(needLiberateRows.length, false));
     clearTimeout(id2);
   }, shineCount * shineInterval + 50);
-}
+};
 
 export const keyDownHandler = (e: { code: string }) => {
   const state = store.getState();
@@ -51,7 +51,7 @@ export const keyDownHandler = (e: { code: string }) => {
           console.log("游戏结束");
           // @ts-ignore
           store.dispatch(playSound(FAILURE, state.volume));
-          store.dispatch(gameActionCreator(Stop as GameStatus))
+          store.dispatch(gameActionCreator(Stop as GameStatus));
         }
 
         // 批量占据方块
@@ -74,7 +74,7 @@ export const keyDownHandler = (e: { code: string }) => {
       return;
     case keyboard.ArrowLeft:
       // 如果新的方块组未进入视野，不作操作
-      if (getPoints(pos, shapeProperties).every(point => point.y < 0)) return;
+      if (getPoints(pos, shapeProperties).every((point) => point.y < 0)) return;
       if (scan(pos, shapeProperties, mesh!, keyboard.ArrowLeft as Direction)) {
         console.log("到最左侧了");
         // @ts-ignore
@@ -85,7 +85,7 @@ export const keyDownHandler = (e: { code: string }) => {
       return;
     case keyboard.ArrowRight:
       // 如果新的方块组未进入视野，不作操作
-      if (getPoints(pos, shapeProperties).every(point => point.y < 0)) return;
+      if (getPoints(pos, shapeProperties).every((point) => point.y < 0)) return;
       if (scan(pos, shapeProperties, mesh!, keyboard.ArrowRight as Direction)) {
         console.log("到最右侧了");
         // @ts-ignore
@@ -96,10 +96,8 @@ export const keyDownHandler = (e: { code: string }) => {
       return;
     case keyboard.ArrowUp:
       // 如果新的方块组未进入视野，不作操作
-      if (getPoints(pos, shapeProperties).every(point => point.y < 0)) return;
-      if (
-        maybeRotate(pos, shapeProperties, mesh)
-      ) {
+      if (getPoints(pos, shapeProperties).every((point) => point.y < 0)) return;
+      if (maybeRotate(pos, shapeProperties, mesh)) {
         // 不可旋转
         console.log("不可旋转");
         // @ts-ignore
@@ -120,9 +118,7 @@ export const keyDownHandler = (e: { code: string }) => {
         p = state.keyboard;
       }
       // 批量占据方块
-      store.dispatch(
-        meshActions.batchOccupy(getPoints(p, shapeProperties))
-      );
+      store.dispatch(meshActions.batchOccupy(getPoints(p, shapeProperties)));
 
       // 检测是否需要消除
       const needLiberateRows = needLibeate(store.getState().mesh);
@@ -144,52 +140,56 @@ function debounce(fn: Function, duration: number) {
     if (id) {
       return;
     } else {
-      fn()
+      fn();
       id = window.setTimeout(() => {
         clearTimeout(id!);
         id = null;
-      }, duration)
+      }, duration);
     }
-  }
+  };
 }
 
 // 简易移动端适配
 function init() {
-  let width = document.body.clientWidth;
+  let width = window.screen.width;
+  let height = window.screen.height;
+  
   const html = document.querySelector("html");
 
-  if (!width) return;
-  if (width < 750) {
-    html!.style.fontSize = Math.floor(width / 500 * 16) + "px";
+  if(width !== undefined && height !== undefined) {
+    const small = Math.min(width, height);
+    if(small < 750) html!.style.fontSize = Math.floor(small / 500 * 16) + "px";
   }
 }
 
 export function runTimer(rank: number) {
-  const internal = Math.ceil(1000 / rank)
+  const internal = Math.ceil(1000 / rank);
   let id = window.setInterval(() => {
     keyDownHandler({ code: "ArrowDown" });
   }, internal);
 
   return {
     id,
-    stop() { clearInterval(id) },
+    stop() {
+      clearInterval(id);
+    },
     reRun(rank: number) {
       clearInterval(id);
       id = runTimer(rank).id;
     },
-  }
+  };
 }
 
 export type AfterRun = {
-  reRunTimer: Function,
-  stop: Function,
-}
+  reRunTimer: Function;
+  stop: Function;
+};
+
+init();
+const fn = debounce(init, 300);
+window.addEventListener("resize", () => fn());
 
 export function run(rank: number = 1) {
-  init()
-  const fn = debounce(init, 300);
-  window.addEventListener("resize", () => fn());
-
   let lock = false;
 
   const handleKeyDown = (e: KeyboardEvent) => {
@@ -198,13 +198,13 @@ export function run(rank: number = 1) {
     e.preventDefault();
     lock = true;
     keyDownHandler(e);
-  }
+  };
 
   const handleKeyUp = (e: KeyboardEvent) => {
     if (lock) {
       lock = false;
     }
-  }
+  };
 
   document.addEventListener("keydown", handleKeyDown);
   document.addEventListener("keyup", handleKeyUp);
@@ -218,8 +218,7 @@ export function run(rank: number = 1) {
       document.removeEventListener("keyup", handleKeyUp);
       window.removeEventListener("resize", init);
     },
-  }
+  };
 }
-
 
 // export const { stop, reRunTimer } = run();
