@@ -57,6 +57,19 @@ export const needLibeate = (mesh: MeshState): number[] => {
 };
 
 
+export const getStorageItem = (key: string) => {
+  const data = localStorage.getItem(key);
+  return data ? JSON.parse(data) : null;
+}
+
+export const setStorageItem = (key: string, data: string) => {
+  localStorage.setItem(key, data)
+}
+
+export const isStorageEmpty = () => {
+  return !!localStorage.length;
+}
+
 // 检测是否可旋转，有bug
 export const maybeRotate = (pos: BlockGroupPosition, shapeProperties: ShapeProperties, mesh: MeshState): boolean => {
   const { angle } = pos;

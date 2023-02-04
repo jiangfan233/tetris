@@ -1,3 +1,5 @@
+import { BlockGroupPosition } from "../../reducers/keyboard";
+import { MeshState } from "../../reducers/Mesh";
 
 const Start = "Start";
 const Stop = "Stop";
@@ -9,12 +11,15 @@ export type GameAction = {
   type: GameStatus,
 }
 
-type GameActionCreator = (type: GameStatus, rank?: number) => { type: GameStatus };
+type GameActionCreator = (type: GameStatus, rank?: number, volume?: number, mesh?: MeshState, keyboard?: BlockGroupPosition) => { type: GameStatus };
 
-export const gameActionCreator: GameActionCreator = (type, rank) => {
+export const gameActionCreator: GameActionCreator = (type, rank, volume?: number, mesh?: MeshState, keyboard?: BlockGroupPosition) => {
   return {
     type,
-    rank
+    rank,
+    volume,
+    mesh,
+    keyboard,
   }
 }
 

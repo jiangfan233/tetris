@@ -3,7 +3,7 @@ import { Direction } from "../actions/keyboard";
 import { ShapeConfig, ShapeType } from "../components/ShapeConfig";
 import { store } from "../store";
 import { scan } from "../utils/scan";
-import { getPoints, maybeRotate, needLibeate } from "../utils/index";
+import { getPoints, maybeRotate, needLibeate, setStorageItem } from "../utils/index";
 import { keyboard } from "../actions/keyboard";
 import { score } from "../actions/score";
 import { Sound } from "../actions/sound";
@@ -153,12 +153,12 @@ function debounce(fn: Function, duration: number) {
 function init() {
   let width = window.screen.width;
   let height = window.screen.height;
-  
+
   const html = document.querySelector("html");
 
-  if(width !== undefined && height !== undefined) {
+  if (width !== undefined && height !== undefined) {
     const small = Math.min(width, height);
-    if(small < 750) html!.style.fontSize = Math.floor(small / 500 * 16) + "px";
+    if (small < 750) html!.style.fontSize = Math.floor(small / 500 * 16) + "px";
   }
 }
 
@@ -221,4 +221,9 @@ export function run(rank: number = 1) {
   };
 }
 
-// export const { stop, reRunTimer } = run();
+window.onbeforeunload = function () {
+  Object.entries(store.getState()).filter(entry => !entry[0] || entry[0] !== "game" && entry[0] !== "sound").forEach(([key, value]) => {
+    setStorageItem(key, JSON.stringify(value));
+  })
+  window.onbeforeunload = null;
+}
