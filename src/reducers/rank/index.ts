@@ -8,7 +8,7 @@ export const rankReducer = (rank = 1, action: RankAction) => {
   switch(type) {
     case IncreaseRank:
       const newRank = rank + rankDiff > 5 ? 1 : rank + rankDiff;
-      game.afterRun?.reRunTimer(newRank);
+      game?.afterRun?.reRunTimer(newRank);
       return newRank;
     default:
       return rank;

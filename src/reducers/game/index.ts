@@ -14,17 +14,19 @@ const initState: GameState = {
 }
 
 export const gameReducer: GameReducer = (state = initState, action: GameAction) => {
-  const { type } = action;
-
+  const { type, rank } = action;
   switch (type) {
     case Start:
       return { status: Start as GameStatus, afterRun: run() };
+
+    case Continue:
+      return { status: Start as GameStatus, afterRun: run(rank) };
+
     case Stop:
       const { afterRun } = state;
       afterRun && afterRun.stop();
       return { status: Stop as GameStatus, afterRun: undefined };
-    case Continue:
-      return state;
+
     default:
       return state;
   }

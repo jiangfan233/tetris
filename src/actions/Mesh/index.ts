@@ -1,4 +1,5 @@
 import { BlockColor } from "../../config";
+import { MeshState } from "../../reducers/Mesh";
 
 // 占据一个点
 export const OCCUPY = "OCCUPY";
@@ -21,6 +22,9 @@ export const SHINE_ROWS = "SHINE_ROWS";
 // 重置
 export const RESET = "RESET";
 
+// 恢复
+export const RESTORE = "RESTORE";
+
 export type PointActionType =
   | typeof OCCUPY
   | typeof LIBERATE
@@ -28,7 +32,8 @@ export type PointActionType =
   | typeof BATCH_LIBERATE
   | typeof BATCH_LIBERATE_ROWS
   | typeof SHINE_ROWS
-  | typeof RESET;
+  | typeof RESET
+  | typeof RESTORE;
 
 export type Point = {
   x: number;
@@ -39,14 +44,16 @@ export interface PointAction {
   type: PointActionType;
   points?: Point[];
   rows?: number[];
-  bgType?: BlockColor
+  bgType?: BlockColor;
+  mesh?: MeshState;
 }
 
+
+type RestoreMeshActionCreator = (mesh: MeshState) => PointAction;
 type PointActionCreator = (points?: Point[]) => PointAction;
 type RowActionCreator = (rows: number[], bgType: BlockColor) => PointAction;
 
-export type MeshActionCreator = PointActionCreator | RowActionCreator;
-
+export type MeshActionCreator = PointActionCreator | RowActionCreator | RestoreMeshActionCreator;
 // 批量解放行
 export const batchLiberateRows: RowActionCreator = (rows: number[]) => {
   return {
@@ -87,6 +94,14 @@ export const resetMesh : PointActionCreator = () => {
 
 }
 
+export const restoreMesh : RestoreMeshActionCreator = (mesh: MeshState) => {
+  return {
+    type: RESTORE,
+    mesh,
+  }
+
+}
+
 
 export const mesh = {
   BATCH_LIBERATE,
@@ -98,5 +113,7 @@ export const mesh = {
   SHINE_ROWS,
   shineRows,
   resetMesh,
-  RESET
+  RESET,
+  RESTORE,
+  restoreMesh,
 };

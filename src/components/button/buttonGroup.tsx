@@ -53,7 +53,7 @@ export const LeftButtons = ({ isPortrait = false, dispatch, game, rank, volume }
         return;
 
       case Volume:
-        return dispatch!(volumeAction.increaseVolume(1));
+        return dispatch!(volumeAction.volumeDo(volumeAction.IncreaseVolume, 1));
       case Rank:
         // const { game } = store.getState()
         return dispatch!(rankAction.increaseRank(1, game!));

@@ -1,19 +1,15 @@
-import {
-  BATCH_OCCUPY,
-  PointAction,
-  BATCH_LIBERATE_ROWS,
-  SHINE_ROWS,
-  RESET,
-} from "../../actions/Mesh";
+import { mesh, type PointAction } from "../../actions/Mesh";
 import { Mesh as MeshConfig } from "../../config";
 import produce from "immer";
+
+const { BATCH_OCCUPY, BATCH_LIBERATE_ROWS, SHINE_ROWS, RESET, RESTORE } = mesh
 
 type ColorBlock = {
   // 值
   val: number,
   // 颜色类型
   bgType: string,
-  [key: string]: number | string 
+  [key: string]: number | string
 };
 export type MeshState = {
   points: ColorBlock[][];
@@ -33,7 +29,7 @@ export const MeshReducer = (
     case BATCH_OCCUPY:
       return produce(state, (draft: MeshState) => {
         action.points!.forEach((point) => {
-          if(draft.points[point.x] && draft.points[point.x][point.y]) {
+          if (draft.points[point.x] && draft.points[point.x][point.y]) {
             draft.points[point.x][point.y].val = 1;
             draft.points[point.x][point.y].bgType = "1";
           }
@@ -44,13 +40,11 @@ export const MeshReducer = (
     case BATCH_LIBERATE_ROWS:
       return produce(state, (draft: MeshState) => {
         const len = action.rows!.length;
-        const start = action.rows![0];
-        draft.points.forEach(col => {
-          col.splice(start, len);
-          col.unshift(...Array(len).fill(0)
-            .map((item, index) => ({ posY: index, val: 0, bgType: "0" }))
-            .reverse()
-          );
+        action.rows?.forEach((row, index) => {
+          draft.points.forEach(col => {
+            col.splice(row, 1);
+            col.unshift({ posY: len - 1 - index, val: 0, bgType: "0" })
+          })
         })
       });
 
@@ -63,9 +57,12 @@ export const MeshReducer = (
           })
         })
       })
-    
+
     case RESET:
       return initialState
+
+    case RESTORE:
+      return action.mesh;
 
     default:
       return state;
