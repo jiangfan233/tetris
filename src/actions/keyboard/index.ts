@@ -1,111 +1,35 @@
 
-import { ShapeProperties } from "../../components/ShapeConfig";
+import { BlockGroupPosition } from "../../reducers/keyboard";
+
+export type KeyboardActionType = "ArrowRight" | "ArrowLeft" | "ArrowUp" | "ArrowDown" | "Space" | "Reset" | "Restore";
 
 // action types
-export const ArrowRight = "ArrowRight";
-export const ArrowLeft = "ArrowLeft";
-export const ArrowUp = "ArrowUp";
-export const ArrowDown = "ArrowDown";
-export const Space = "Space";
-export const Reset = "Reset";
+export const ArrowRight: KeyboardActionType = "ArrowRight";
+export const ArrowLeft: KeyboardActionType = "ArrowLeft";
+export const ArrowUp: KeyboardActionType = "ArrowUp";
+export const ArrowDown: KeyboardActionType = "ArrowDown";
+export const Space: KeyboardActionType = "Space";
+export const Reset: KeyboardActionType = "Reset";
+export const Restore: KeyboardActionType = "Restore";
 
-export type Direction =
-  | typeof ArrowRight
-  | typeof ArrowLeft
-  | typeof ArrowUp
-  | typeof ArrowDown;
+export type Direction = "ArrowRight" | "ArrowLeft" | "ArrowUp" | "ArrowDown";
 
-export type Keys = Direction | typeof Space;
+export type Keys = Direction | "Space";
 
 export type KeyboardAction = {
-  type:
-    | typeof ArrowRight
-    | typeof ArrowLeft
-    | typeof ArrowUp
-    | typeof ArrowDown
-    | typeof Space
-    | typeof Reset
-
-  data: {
-    width: number;
-    height: number;
-  };
+  type: KeyboardActionType,
+  pos?: BlockGroupPosition
 };
 
-export type KeyboardActionCreator = (
-  shapeProperties: ShapeProperties
-) => KeyboardAction;
+export type KeyboardActionCreator = (type: KeyboardActionType, pos?: BlockGroupPosition) => KeyboardAction;
 
-// action creators
-export const moveRight: KeyboardActionCreator = (
-  shapeProperties: ShapeProperties
-) => {
+export const blocksDo: KeyboardActionCreator = (type, pos?) => {
   return {
-    type: ArrowRight,
-    data: {
-      width: shapeProperties.width!,
-      height: shapeProperties.height!
-    }
-  };
-};
-
-export const moveLeft: KeyboardActionCreator = (
-  shapeProperties: ShapeProperties
-) => {
-  return {
-    type: ArrowLeft,
-    data: {
-      width: shapeProperties.width!,
-      height: shapeProperties.height!
-    }
-  };
-};
-
-export const moveDown: KeyboardActionCreator = (
-  shapeProperties: ShapeProperties
-) => {
-  return {
-    type: ArrowDown,
-    data: {
-      width: shapeProperties.width!,
-      height: shapeProperties.height!
-    }
-  };
-};
-
-export const rotate: KeyboardActionCreator = (
-  shapeProperties: ShapeProperties
-) => {
-  return {
-    type: ArrowUp,
-    data: {
-      width: shapeProperties.width!,
-      height: shapeProperties.height!
-    }
-  };
-};
-
-export const drop: KeyboardActionCreator = (
-  shapeProperties: ShapeProperties
-) => {
-  return {
-    type: Space,
-    data: {
-      width: shapeProperties.width!,
-      height: shapeProperties.height!
-    }
-  };
-};
-
-export const reset :KeyboardActionCreator = (shapeProperties: ShapeProperties) => {
-  return {
-    type: Reset,
-    data: {
-      width: shapeProperties.width!,
-      height: shapeProperties.height!
-    }
-  };
+    type,
+    pos
+  }
 }
+
 
 export const keyboard = {
   ArrowRight,
@@ -113,11 +37,7 @@ export const keyboard = {
   ArrowUp,
   ArrowDown,
   Space,
-  moveRight,
-  moveLeft,
-  moveDown,
-  rotate,
-  drop,
   Reset,
-  reset,
+  Restore,
+  blocksDo,
 }

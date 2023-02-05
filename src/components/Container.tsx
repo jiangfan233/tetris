@@ -3,14 +3,19 @@ import styled from "styled-components"
 import { Mesh as MeshConfig } from "../config"
 import { MeshBlocksWrapper } from "./MeshBlocks"
 import React from "react"
-import Continue from "/src/static/play-circle.svg";
-import Restart from "/src/static/arrow-clockwise.svg";
+import ContinueSvg from "/src/static/play-circle.svg";
+import RestartSvg from "/src/static/arrow-clockwise.svg";
 import { connect } from "react-redux";
 import { GameState } from "../reducers/game";
-import { game, gameActionCreator } from "../actions/game";
-import { isStorageEmpty } from "../utils";
+import { game, gameActionCreator, GameStatus } from "../actions/game";
+import { getStorageItem, isStorageEmpty, clearStorage } from "../utils";
+import { mesh } from "../actions/Mesh";
+import { volume } from "../actions/volume";
+import { keyboard, Reset } from "../actions/keyboard";
+import { rank } from "../actions/rank";
+import { score } from "../actions/score";
 
-const { Start } = game;
+const { Start, Continue } = game;
 
 const StyledContainer = styled.div.attrs({})`
   box-sizing: content-box;
@@ -61,23 +66,24 @@ const Button = styled.button.attrs({
   className: "text-white rounded-xl w-fit"
 })`
   display: flex;
+  flex-wrap: nowrap;
   align-items: center;
   justify-content: center;
   background-color: transparent;
-  transition: gap ease-in-out 1s, width ease-in-out 1s, 
-              padding ease-in-out 1s, background-color ease-in-out 1s;
+  transition: gap ease-in-out 0.5s, width ease-in-out 0.5s, 
+              padding ease-in-out .5s, background-color ease-in-out .5s;
   gap: 0rem;
 
   & p {
     width: 0;
     opacity: 0;
     white-space: nowrap;
-    transition: width ease-in-out 1s, opacity ease-in-out 1s;
+    transition: width ease-in-out .5s, opacity ease-in-out .5s;
   }
 
   & img {
     height: 1.7rem;
-    transition: height ease-in-out 1s;
+    transition: height ease-in-out .5s;
   }
 
   &:hover{
@@ -99,21 +105,33 @@ const Button = styled.button.attrs({
 
 export const Container = ({ dispatch, game, children }: ContainerProps) => {
   const { status } = game!;
-  
+
+  // 继续游戏
   const handleClickContinue = () => {
-    // 继续游戏，恢复之前的游戏数据，keyboard、mesh、rank、score
-    // dispatch!(gameActionCreator(Continue, ))
+    const rankData = getStorageItem("rank");
+    dispatch!(gameActionCreator(Continue as GameStatus, rankData ? Number(rankData) : undefined));
+    clearStorage();
   }
-  
+
+  const handleRestart = () => {
+    dispatch!(rank.increaseRank(0));
+    dispatch!(mesh.resetMesh());
+    dispatch!(volume.volumeDo(volume.ResetVolume, 0));
+    dispatch!(score.updateScore(0, true))
+    dispatch!(keyboard.blocksDo(Reset));
+    dispatch!(gameActionCreator(Start as GameStatus));
+    clearStorage();
+  }
+
   return (
     <StyledContainer>
       <Mask className={status === Start ? "start" : "stop"}>
-        <Button style={{ display: isStorageEmpty() ? "none" : "block" }} >
-          <img src={Continue} alt={"Continue"} />
+        <Button style={{ display: isStorageEmpty() ? "none" : "flex" }} onClick={() => game && game.status === Start ? {} : handleClickContinue()} >
+          <img src={ContinueSvg} alt={"Continue"} />
           <p className="text-2xl font-bold whitespace-nowrap">Continue</p>
         </Button>
-        <Button>
-          <img src={Restart} alt={"Restart"}></img>
+        <Button onClick={() => game && game.status === Start ? {} : handleRestart()}>
+          <img src={RestartSvg} alt={"Restart"}></img>
           <p className="text-2xl font-bold whitespace-nowrap">Restart</p>
         </Button>
       </Mask>

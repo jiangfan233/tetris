@@ -1,22 +1,24 @@
 
 
-
-const IncreaseVolume = "IncreaseVolume";
+export type VolumeActionType = "IncreaseVolume" | "ResetVolume";
+const IncreaseVolume: VolumeActionType = "IncreaseVolume";
+const ResetVolume: VolumeActionType = "ResetVolume";
 
 export type VolumeAction = {
-  type: typeof IncreaseVolume,
+  type: VolumeActionType,
   volumeDiff: number
 };
-type VolumeActionCreator = (volumnDiff: number) => VolumeAction
+type VolumeActionCreator = (type: VolumeActionType, volumnDiff: number) => VolumeAction
 
-const increaseVolume: VolumeActionCreator = (volumeDiff: number) => {
+const volumeDo: VolumeActionCreator = (type, volumeDiff) => {
   return {
-    type: IncreaseVolume,
+    type,
     volumeDiff
   }
 }
 
 export const volume = {
   IncreaseVolume,
-  increaseVolume,
+  volumeDo,
+  ResetVolume,
 }

@@ -59,7 +59,7 @@ export const needLibeate = (mesh: MeshState): number[] => {
 
 export const getStorageItem = (key: string) => {
   const data = localStorage.getItem(key);
-  return data ? JSON.parse(data) : null;
+  return data ? JSON.parse(data) : undefined;
 }
 
 export const setStorageItem = (key: string, data: string) => {
@@ -67,7 +67,26 @@ export const setStorageItem = (key: string, data: string) => {
 }
 
 export const isStorageEmpty = () => {
-  return !!localStorage.length;
+  return localStorage.length === 0;
+}
+
+export const clearStorage = () => {
+  localStorage.clear();
+}
+
+export function debounce(fn: Function, duration: number) {
+  let id: number | null = null;
+  return function () {
+    if (id) {
+      return;
+    } else {
+      fn();
+      id = window.setTimeout(() => {
+        clearTimeout(id!);
+        id = null;
+      }, duration);
+    }
+  };
 }
 
 // 检测是否可旋转，有bug
