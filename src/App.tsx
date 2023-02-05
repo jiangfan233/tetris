@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import GlobalBlockGroup from "./components/BlockGroup";
-import { Container, GlobalContainer } from "./components/Container";
+import { GlobalContainer } from "./components/Container";
 import "./control/index"
 import { GlobalScore } from "./components/details/score";
 import { Decorator } from "./components/decorator"

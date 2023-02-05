@@ -49,13 +49,11 @@ export const LeftButtons = ({ isPortrait = false, dispatch, game, rank, volume }
             dispatch!(rankAction.increaseRank(1 - rank!, game!));
             dispatch!(score.updateScore(0, true));
             return dispatch!(gameActionCreator(Start as GameStatus));
-          case Continue:
-            return dispatch!(gameActionCreator(Continue as GameStatus));
         }
         return;
 
       case Volume:
-        return dispatch!(volumeAction.increaseVolume(1));
+        return dispatch!(volumeAction.volumeDo(volumeAction.IncreaseVolume, 1));
       case Rank:
         // const { game } = store.getState()
         return dispatch!(rankAction.increaseRank(1, game!));

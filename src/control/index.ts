@@ -1,16 +1,22 @@
 import { mesh as meshActions } from "../actions/Mesh";
-import { Direction } from "../actions/keyboard";
 import { ShapeConfig, ShapeType } from "../components/ShapeConfig";
 import { store } from "../store";
 import { scan } from "../utils/scan";
-import { getPoints, maybeRotate, needLibeate } from "../utils/index";
+import { debounce, getPoints, isStorageEmpty, maybeRotate, needLibeate, setStorageItem } from "../utils/index";
 import { keyboard } from "../actions/keyboard";
 import { score } from "../actions/score";
 import { Sound } from "../actions/sound";
 import { game, GameStatus } from "../actions/game";
+import { reactiveWindow, restoreData } from "./init";
 
 const { FAILURE, SUCCESS, WARNING, playSound } = Sound;
 const { gameActionCreator, Stop } = game;
+const { ArrowRight, ArrowLeft, ArrowUp, ArrowDown, Space, Reset, blocksDo, } = keyboard;
+
+export type AfterRun = {
+  reRunTimer: Function;
+  stop: Function;
+};
 
 const shineRowsAndUpdateScore = (
   needLiberateRows: number[],
@@ -43,11 +49,11 @@ export const keyDownHandler = (e: { code: string }) => {
   const shapeProperties = ShapeConfig[pos.shape as ShapeType];
 
   switch (e.code) {
-    case keyboard.ArrowDown:
+    case ArrowDown:
       // 如果方块下面有物体（方块、底部）
-      if (scan(pos, shapeProperties, mesh!, keyboard.ArrowDown as Direction)) {
+      if (scan(pos, shapeProperties, mesh!, ArrowDown)) {
         // 最顶层有1，有方块了，游戏结束
-        if (mesh.points.some((col) => col[1].val === 1)) {
+        if (mesh!.points.some((col) => col[1].val === 1)) {
           console.log("游戏结束");
           // @ts-ignore
           store.dispatch(playSound(FAILURE, state.volume));
@@ -61,59 +67,59 @@ export const keyDownHandler = (e: { code: string }) => {
 
         // 上一步（batchOccupy）已经已经产生了新的mesh，因此在这一步获取新的mesh
         // 检测是否需要消除
-        const needLiberateRows = needLibeate(store.getState().mesh);
+        const needLiberateRows = needLibeate(store.getState().mesh!);
         if (needLiberateRows.length > 0) {
           shineRowsAndUpdateScore(needLiberateRows, 300, 3);
         }
 
         // 分配新的方块组
-        store.dispatch(keyboard.reset(shapeProperties));
+        store.dispatch(blocksDo(Reset));
       } else {
-        store.dispatch(keyboard.moveDown(shapeProperties));
+        store.dispatch(blocksDo(ArrowDown));
       }
       return;
-    case keyboard.ArrowLeft:
+    case ArrowLeft:
       // 如果新的方块组未进入视野，不作操作
       if (getPoints(pos, shapeProperties).every((point) => point.y < 0)) return;
-      if (scan(pos, shapeProperties, mesh!, keyboard.ArrowLeft as Direction)) {
+      if (scan(pos, shapeProperties, mesh!, ArrowLeft)) {
         console.log("到最左侧了");
         // @ts-ignore
         store.dispatch(playSound(WARNING, state.volume));
       } else {
-        store.dispatch(keyboard.moveLeft(shapeProperties));
+        store.dispatch(blocksDo(ArrowLeft));
       }
       return;
-    case keyboard.ArrowRight:
+    case ArrowRight:
       // 如果新的方块组未进入视野，不作操作
       if (getPoints(pos, shapeProperties).every((point) => point.y < 0)) return;
-      if (scan(pos, shapeProperties, mesh!, keyboard.ArrowRight as Direction)) {
+      if (scan(pos, shapeProperties, mesh!, ArrowRight)) {
         console.log("到最右侧了");
         // @ts-ignore
         store.dispatch(playSound(WARNING, state.volume));
       } else {
-        store.dispatch(keyboard.moveRight(shapeProperties));
+        store.dispatch(blocksDo(ArrowRight));
       }
       return;
-    case keyboard.ArrowUp:
+    case ArrowUp:
       // 如果新的方块组未进入视野，不作操作
       if (getPoints(pos, shapeProperties).every((point) => point.y < 0)) return;
-      if (maybeRotate(pos, shapeProperties, mesh)) {
+      if (maybeRotate(pos, shapeProperties, mesh!)) {
         // 不可旋转
         console.log("不可旋转");
         // @ts-ignore
         store.dispatch(playSound(WARNING, state.volume));
       } else {
-        store.dispatch(keyboard.rotate(shapeProperties));
+        store.dispatch(blocksDo(ArrowUp, pos));
       }
       return;
 
-    case keyboard.Space:
+    case Space:
       let p = pos;
       let sp = shapeProperties;
       let m = mesh;
 
-      while (!scan(p, sp, m!, keyboard.ArrowDown as Direction)) {
-        store.dispatch(keyboard.moveDown(sp));
+      while (!scan(p, sp, m!, ArrowDown)) {
+        store.dispatch(blocksDo(ArrowDown));
         const state = store.getState();
         p = state.keyboard;
       }
@@ -121,46 +127,18 @@ export const keyDownHandler = (e: { code: string }) => {
       store.dispatch(meshActions.batchOccupy(getPoints(p, shapeProperties)));
 
       // 检测是否需要消除
-      const needLiberateRows = needLibeate(store.getState().mesh);
+      const needLiberateRows = needLibeate(store.getState().mesh!);
       if (needLiberateRows.length > 0) {
         // debugger
         shineRowsAndUpdateScore(needLiberateRows, 300, 3);
       }
       // 分配新的方块组
-      store.dispatch(keyboard.reset(shapeProperties));
+      store.dispatch(blocksDo(Reset));
       return;
     default:
       return;
   }
 };
-
-function debounce(fn: Function, duration: number) {
-  let id: number | null = null;
-  return function () {
-    if (id) {
-      return;
-    } else {
-      fn();
-      id = window.setTimeout(() => {
-        clearTimeout(id!);
-        id = null;
-      }, duration);
-    }
-  };
-}
-
-// 简易移动端适配
-function init() {
-  let width = window.screen.width;
-  let height = window.screen.height;
-  
-  const html = document.querySelector("html");
-
-  if(width !== undefined && height !== undefined) {
-    const small = Math.min(width, height);
-    if(small < 750) html!.style.fontSize = Math.floor(small / 500 * 16) + "px";
-  }
-}
 
 export function runTimer(rank: number) {
   const internal = Math.ceil(1000 / rank);
@@ -180,14 +158,21 @@ export function runTimer(rank: number) {
   };
 }
 
-export type AfterRun = {
-  reRunTimer: Function;
-  stop: Function;
-};
 
-init();
-const fn = debounce(init, 300);
-window.addEventListener("resize", () => fn());
+const liveWindow = debounce(reactiveWindow, 300);
+
+(function init() {
+  window.addEventListener("resize", liveWindow);
+  if(!isStorageEmpty()) {
+    restoreData();
+  }
+  window.onbeforeunload = function () {
+    Object.entries(store.getState()).filter(entry => !entry[0] || entry[0] !== "game" && entry[0] !== "sound").forEach(([key, value]) => {
+      setStorageItem(key, JSON.stringify(value));
+    })
+    window.onbeforeunload = null;
+  }
+})()
 
 export function run(rank: number = 1) {
   let lock = false;
@@ -216,9 +201,7 @@ export function run(rank: number = 1) {
       timer.stop();
       document.removeEventListener("keydown", handleKeyDown);
       document.removeEventListener("keyup", handleKeyUp);
-      window.removeEventListener("resize", init);
+      window.removeEventListener("resize", liveWindow);
     },
   };
 }
-
-// export const { stop, reRunTimer } = run();
