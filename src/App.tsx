@@ -7,10 +7,7 @@ import { GlobalScore } from "./components/details/score";
 import { Decorator } from "./components/decorator"
 import { GlobalVolume } from "./components/details/volume";
 import { GlobalRank } from "./components/details/rank";
-import Icon from "./static/icon.png"
 
-// 仅用于让webpack导入此图片
-console.log(Icon);
 
 const StyledApp = styled.div`
   display: flex;

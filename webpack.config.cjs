@@ -10,6 +10,7 @@ const UglifyJsPlugin = require("uglifyjs-webpack-plugin");
 
 // PWA
 const { GenerateSW } = require("workbox-webpack-plugin");
+const WebpackPwaManifest = require('webpack-pwa-manifest')
 
 // const BundleAnalyzerPlugin =require("webpack-bundle-analyzer").BundleAnalyzerPlugin;
 
@@ -48,6 +49,21 @@ module.exports = {
 
     new GenerateSW(),
 
+    new WebpackPwaManifest({
+      publicPath: ".",
+      name: 'Tetris by jiangfan233',
+      short_name: 'Tetris',
+      description: 'Tetris - Progressive Web App!',
+      background_color: '#ffffff',
+      crossorigin: 'use-credentials', //can be null, use-credentials or anonymous
+      icons: [
+        {
+          src: path.resolve('./src/static/icon.png'),
+          sizes: [96, 192, 256,] // multiple sizes
+        },
+      ]
+    })
+
     // 打包速度优化，打包前对比文件改动
     // new webpack.DllPlugin({
     //   path: path.join(__dirname, './dll/[name].manifest.json'), // 生成对应的manifest.json，给webpack打包用
@@ -84,6 +100,7 @@ module.exports = {
       // },
       {
         test: /\.(gif|png|jpe?g|svg)$/i,
+        
         use: [
           'file-loader',
           {
