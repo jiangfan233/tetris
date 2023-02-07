@@ -53,6 +53,7 @@ module.exports = {
       publicPath: ".",
       name: 'Tetris by jiangfan233',
       short_name: 'Tetris',
+      start_url: "./index.html",
       description: 'Tetris - Progressive Web App!',
       background_color: '#ffffff',
       crossorigin: 'use-credentials', //can be null, use-credentials or anonymous
