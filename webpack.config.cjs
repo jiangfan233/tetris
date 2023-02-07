@@ -53,6 +53,7 @@ module.exports = {
       publicPath: ".",
       name: 'Tetris by jiangfan233',
       short_name: 'Tetris',
+      display: "browser",
       start_url: "./index.html",
       description: 'Tetris - Progressive Web App!',
       background_color: '#ffffff',
