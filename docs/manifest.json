@@ -1,0 +1,30 @@
+{
+  "name": "Tetris by jiangfan233",
+  "short_name": "Tetris",
+  "display": "standalone",
+  "start_url": "/",
+  "icons": [
+    {
+      "src": "./src/static/icon.png",
+      "sizes": "256x256",
+      "type": "image/png"
+    }
+  ],
+  "main.css": "main.css",
+  "main.js": "main.fff9423ca7d033ee8900.bundle.js",
+  "sw.js": "sw.1ffacb979f2ecd1d7e3f.bundle.js",
+  "81.bundle.js": "81.df3a2ea6a4cad3eda418.bundle.js",
+  "audios/success.mp3": "audios/success.mp3",
+  "audios/warning.mp3": "audios/warning.mp3",
+  "audios/failure.mp3": "audios/failure.mp3",
+  "imgs/volume-up.svg": "imgs/volume-up.svg",
+  "imgs/muscle-svgrepo-com.svg": "imgs/muscle-svgrepo-com.svg",
+  "index.html": "index.html",
+  "imgs/volume-mute.svg": "imgs/volume-mute.svg",
+  "imgs/arrow-clockwise.svg": "imgs/arrow-clockwise.svg",
+  "imgs/play-circle.svg": "imgs/play-circle.svg",
+  "imgs/caret-right-fill.svg": "imgs/caret-right-fill.svg",
+  "imgs/caret-left-fill.svg": "imgs/caret-left-fill.svg",
+  "imgs/caret-down-fill.svg": "imgs/caret-down-fill.svg",
+  "imgs/caret-up-fill.svg": "imgs/caret-up-fill.svg"
+}

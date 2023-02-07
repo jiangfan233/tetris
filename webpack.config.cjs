@@ -3,7 +3,8 @@ const HtmlWebpackPlugin = require("html-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const CssMinimizerPlugin = require("css-minimizer-webpack-plugin");
 const webpack = require("webpack");
-const TerserPlugin = require("terser-webpack-plugin");
+const { WebpackManifestPlugin } = require("webpack-manifest-plugin");
+// const TerserPlugin = require("terser-webpack-plugin");
 
 const UglifyJsPlugin = require("uglifyjs-webpack-plugin");
 
@@ -13,14 +14,19 @@ const UglifyJsPlugin = require("uglifyjs-webpack-plugin");
 // const CommonsChunkPlugin = require('webpack/lib/optimize/CommonsChunkPlugin');
 
 module.exports = {
-  entry: "./src/main.tsx",
+  // entry: ["./src/main.tsx", "./sw.js"],
+  entry: {
+    main: "./src/main.tsx",
+    sw: "./sw.js",
+  },
   mode: "production",
 
   plugins: [
     new HtmlWebpackPlugin({
       filename: "index.html",
       title: "Test Build-俄罗斯方块",
-      template: "./index.html",
+      excludeChunks: ["sw", "main"],
+      template: "./template.html",
     }),
     new MiniCssExtractPlugin({
       filename: "[name].css",
@@ -36,12 +42,36 @@ module.exports = {
     //   // 提取出的公共部分形成一个新的 Chunk，这个新 Chunk 的名称
     //   name: 'common'
     // })
+
+    new WebpackManifestPlugin({
+      publicPath: "",
+      seed: {
+        name: "Tetris by jiangfan233",
+        short_name: "Tetris",
+        display: "standalone",
+        start_url: "/",
+        icons: [
+          {
+            src: "./src/static/icon.png",
+            sizes: "256x256",
+            type: "image/png",
+          },
+        ],
+      },
+    }),
+
+    // 打包速度优化，打包前对比文件改动
+    // new webpack.DllPlugin({
+    //   path: path.join(__dirname, './dll/[name].manifest.json'), // 生成对应的manifest.json，给webpack打包用
+    //   name: '[name]',
+    // }),
+
   ],
 
   output: {
     path: path.resolve(__dirname, "docs"),
-    filename: "[name].bundle.js",
-    chunkFilename: "[name].chunk.js",
+    filename: "[name].[contenthash].bundle.js",
+    chunkFilename: "[name].[contenthash].chunk.js",
     clean: true,
   },
 
@@ -88,6 +118,9 @@ module.exports = {
 
   // 优化
   optimization: {
+    splitChunks: {
+      chunks: "all"
+    },
     sideEffects: true,
     // production 环境默认开启，其他环境默认关闭
     concatenateModules: true,
@@ -128,7 +161,6 @@ module.exports = {
           nameCache: null,
           ie8: false,
           keep_fnames: false,
-          
         },
       }),
     ],
