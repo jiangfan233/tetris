@@ -12,7 +12,7 @@
     <script>
       if (navigator.serviceWorker !== null) {
         navigator.serviceWorker
-          .register("./sw.js")
+          .register("./sw.bundle.js")
           .then(function (registration) {
             console.log("serviceWorker 已注册");
           })

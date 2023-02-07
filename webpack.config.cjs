@@ -25,7 +25,7 @@ module.exports = {
     new HtmlWebpackPlugin({
       filename: "index.html",
       title: "Test Build-俄罗斯方块",
-      excludeChunks: ["sw", "main"],
+      // excludeChunks: ["sw", "main"],
       template: "./template.html",
     }),
     new MiniCssExtractPlugin({
@@ -52,7 +52,7 @@ module.exports = {
         start_url: "/",
         icons: [
           {
-            src: "./src/static/icon.png",
+            src: "./imgs/icon.png",
             sizes: "256x256",
             type: "image/png",
           },
@@ -70,8 +70,8 @@ module.exports = {
 
   output: {
     path: path.resolve(__dirname, "docs"),
-    filename: "[name].[contenthash].bundle.js",
-    chunkFilename: "[name].[contenthash].chunk.js",
+    filename: "[name].bundle.js",
+    chunkFilename: "[name].chunk.js",
     clean: true,
   },
 
