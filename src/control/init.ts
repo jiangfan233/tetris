@@ -36,6 +36,6 @@ export function reactiveWindow() {
 
   if (width !== undefined && height !== undefined) {
     const small = Math.min(width, height);
-    if (small < 750) html!.style.fontSize = Math.floor(small / 500 * 16) + "px";
+    if (small < 550) html!.style.fontSize = Math.floor(small / 500 * 16) + "px";
   }
 }
