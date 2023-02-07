@@ -3,21 +3,10 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="manifest" href="./manifest.json" />
     <title>Test Build-俄罗斯方块</title>
   </head>
   <body>
     <div id="root"></div>
 
-    <script>
-      if (navigator.serviceWorker !== null) {
-        navigator.serviceWorker
-          .register("./sw.bundle.js")
-          .then(function (registration) {
-            console.log("serviceWorker 已注册");
-          })
-          .catch((err) => console.log("err", err));
-      }
-    </script>
   </body>
 </html>
