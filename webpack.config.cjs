@@ -3,9 +3,14 @@ const HtmlWebpackPlugin = require("html-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const CssMinimizerPlugin = require("css-minimizer-webpack-plugin");
 const webpack = require("webpack");
-const TerserPlugin = require("terser-webpack-plugin");
+
+// const TerserPlugin = require("terser-webpack-plugin");
 
 const UglifyJsPlugin = require("uglifyjs-webpack-plugin");
+
+// PWA
+const { GenerateSW, InjectManifest } = require("workbox-webpack-plugin");
+const WebpackPwaManifest = require('webpack-pwa-manifest')
 
 // const BundleAnalyzerPlugin =require("webpack-bundle-analyzer").BundleAnalyzerPlugin;
 
@@ -13,14 +18,19 @@ const UglifyJsPlugin = require("uglifyjs-webpack-plugin");
 // const CommonsChunkPlugin = require('webpack/lib/optimize/CommonsChunkPlugin');
 
 module.exports = {
-  entry: "./src/main.tsx",
+  // bad
+  // entry: ["./src/main.tsx", "./sw.js"],
+  entry: {
+    main: "./src/main.tsx",
+  },
   mode: "production",
 
   plugins: [
     new HtmlWebpackPlugin({
       filename: "index.html",
       title: "Test Build-俄罗斯方块",
-      template: "./index.html",
+      // excludeChunks: ["sw", "main"],
+      template: "./template.html",
     }),
     new MiniCssExtractPlugin({
       filename: "[name].css",
@@ -36,12 +46,39 @@ module.exports = {
     //   // 提取出的公共部分形成一个新的 Chunk，这个新 Chunk 的名称
     //   name: 'common'
     // })
+
+    new InjectManifest({
+      swDest: "./sw.js",
+      swSrc: "./src/sw-src.js"
+    }),
+
+    new WebpackPwaManifest({
+      publicPath: ".",
+      name: 'Tetris by jiangfan233',
+      short_name: 'Tetris',
+      display: "standalone",
+      start_url: "./index.html",
+      description: 'Tetris - Progressive Web App!',
+      background_color: '#ffffff',
+      crossorigin: 'use-credentials', //can be null, use-credentials or anonymous
+      icons: [
+        {
+          src: path.resolve('./src/static/icon.png'),
+          sizes: [96, 192, 256,] // multiple sizes
+        },
+      ]
+    })
+
+    // 打包速度优化，打包前对比文件改动
+    // new webpack.DllPlugin({
+    //   path: path.join(__dirname, './dll/[name].manifest.json'), // 生成对应的manifest.json，给webpack打包用
+    //   name: '[name]',
+    // }),
   ],
 
   output: {
     path: path.resolve(__dirname, "docs"),
     filename: "[name].bundle.js",
-    chunkFilename: "[name].chunk.js",
     clean: true,
   },
 
@@ -67,13 +104,37 @@ module.exports = {
       //   type: "asset/resource",
       // },
       {
-        test: /\.(png|jpg|gif|svg|eot|ttf|woff|woff2)$/,
-        // loader: 'url-loader?name=images/[name].[ext]',
-        loader: "url-loader",
-        options: {
-          limit: 10,
-          name: "imgs/[name].[ext]",
-        },
+        test: /\.(gif|png|jpe?g|svg)$/i,
+        
+        use: [
+          'file-loader',
+          {
+            loader: 'image-webpack-loader',
+            options: {
+              mozjpeg: {
+                progressive: true,
+                enabled: false,
+              },
+              // optipng.enabled: false will disable optipng
+              optipng: {
+                enabled: true,
+              },
+              pngquant: {
+                quality: [0.65, 0.90],
+                speed: 4
+              },
+              gifsicle: {
+                interlaced: false,
+                enabled: false,
+              },
+              // the webp option will enable WEBP
+              webp: {
+                quality: 75,
+                enabled: false,
+              }
+            }
+          },
+        ],
       },
       {
         test: /\.(mp3)$/,
@@ -88,6 +149,9 @@ module.exports = {
 
   // 优化
   optimization: {
+    splitChunks: {
+      chunks: "all",
+    },
     sideEffects: true,
     // production 环境默认开启，其他环境默认关闭
     concatenateModules: true,
@@ -128,7 +192,6 @@ module.exports = {
           nameCache: null,
           ie8: false,
           keep_fnames: false,
-          
         },
       }),
     ],

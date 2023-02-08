@@ -162,6 +162,7 @@ export function runTimer(rank: number) {
 const liveWindow = debounce(reactiveWindow, 300);
 
 (function init() {
+  liveWindow();
   window.addEventListener("resize", liveWindow);
   if(!isStorageEmpty()) {
     restoreData();
