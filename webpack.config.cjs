@@ -9,7 +9,7 @@ const webpack = require("webpack");
 const UglifyJsPlugin = require("uglifyjs-webpack-plugin");
 
 // PWA
-const { GenerateSW } = require("workbox-webpack-plugin");
+const { GenerateSW, InjectManifest } = require("workbox-webpack-plugin");
 const WebpackPwaManifest = require('webpack-pwa-manifest')
 
 // const BundleAnalyzerPlugin =require("webpack-bundle-analyzer").BundleAnalyzerPlugin;
@@ -47,13 +47,16 @@ module.exports = {
     //   name: 'common'
     // })
 
-    new GenerateSW(),
+    new InjectManifest({
+      swDest: "./sw.js",
+      swSrc: "./src/sw-src.js"
+    }),
 
     new WebpackPwaManifest({
       publicPath: ".",
       name: 'Tetris by jiangfan233',
       short_name: 'Tetris',
-      display: "minimal-ui",
+      display: "standalone",
       start_url: "./index.html",
       description: 'Tetris - Progressive Web App!',
       background_color: '#ffffff',

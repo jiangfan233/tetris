@@ -4,6 +4,7 @@ import { Provider } from 'react-redux'
 import App from './App'
 import './index.css'
 import { store } from "./store/index";
+import { Workbox } from "workbox-window";
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
     
@@ -12,3 +13,8 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   </Provider>
   
 )
+
+if ("serviceWorker" in navigator) {
+    const wb = new Workbox("sw.js");
+    wb.register();
+}
