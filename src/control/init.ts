@@ -29,13 +29,8 @@ export function restoreData() {
 
 // 简易移动端适配
 export function reactiveWindow() {
-  let width = window.screen.width;
-  let height = window.screen.height;
-
+  const element = document.documentElement;
   const html = document.querySelector("html");
-
-  if (width !== undefined && height !== undefined) {
-    const small = Math.min(width, height);
-    if (small < 550) html!.style.fontSize = Math.floor(small / 500 * 16) + "px";
-  }
+  let width = element?.clientWidth;
+  if(width < 500) html!.style.fontSize = Math.floor(width! / 30) + "px";
 }

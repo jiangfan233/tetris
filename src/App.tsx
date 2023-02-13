@@ -31,7 +31,7 @@ const Col = styled.div`
 function App() {
 
   return (
-    <StyledApp className="text-xxm xs:text-xs sm:text-sm md:text-base">
+    <StyledApp>
       <Decorator>
         <GlobalContainer>
           <GlobalBlockGroup />
