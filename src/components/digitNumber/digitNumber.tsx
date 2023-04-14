@@ -1,3 +1,4 @@
+import React from "react";
 import styled from "styled-components";
 import "./index.css"
 
@@ -10,7 +11,7 @@ const Ul = styled.ul`
   width: 100%;
 `;
 
-export const DigitNumberGroup = ({ value: num }: { value: number }) => {
+export const DigitNumberGroup = React.memo(({ value: num }: { value: number }) => {
 
   const numStrArr = num.toString().split('');
   const classNames = 'zero one two three four five six seven eight nine'.split(' ');
@@ -34,4 +35,4 @@ export const DigitNumberGroup = ({ value: num }: { value: number }) => {
       )}
     </Ul>
   )
-}
+})

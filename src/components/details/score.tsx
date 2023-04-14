@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import { connect } from "react-redux";
 import { DigitNumberGroup } from "../digitNumber/digitNumber";
+import React from "react";
 
 type Props = {
   dispatch?: Function;

@@ -1,3 +1,4 @@
+import React from "react";
 import styled from "styled-components"
 import { Keys } from "../../actions/keyboard";
 
@@ -42,7 +43,7 @@ type ButtonProps = {
   onClick: Function
 }
 
-export const Button = ({ size = "large", children, type, onClick }: ButtonProps) => {
+export const Button = React.memo(({ size = "large", children, type, onClick }: ButtonProps) => {
 
   return (
     <StyledButton onClick={() => { onClick(type) }} size={size}>
@@ -50,4 +51,4 @@ export const Button = ({ size = "large", children, type, onClick }: ButtonProps)
 
     </StyledButton>
   )
-}
+})
