@@ -1,11 +1,8 @@
-开发中！
-俄罗斯方块小游戏，用于练习react、redux、typescript、tailwindcss、移动端适配；
-
-主要代码在dev分支。
-
-目前已实现碰撞检测功能、移动端简易适配、css布局样式、警告以及失败音效。
-
-2023.02.08: 加入pwa；可在chrome中安装并离线运行。
+React性能优化“纯自用无脑”准则：
+1、越小的组件需要进行更仔细的性能优化;
+2、使用自定义比较函数对 React.memo 组件进行深层次比较（React.mome要慎用）;
+3、组件中定义的函数一般都用 useCallback 包裹，函数中使用到的 state(s)、setState(s) 都放在依赖项中
+4、使用 useMemo 缓存值、缓存组件
 
 
 使用须知：
