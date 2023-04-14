@@ -1,7 +1,7 @@
 import styled from "styled-components"
 import React from "react"
 import { Row } from "./common"
-import { LeftButtons, RightButtons, GlobalLeftButtons } from "./button/buttonGroup"
+import { RightButtons, GlobalLeftButtons } from "./button/buttonGroup"
 
 
 
@@ -36,7 +36,7 @@ const Border = styled.div.attrs({
   box-shadow: 0.4rem 0.4rem 1rem black, 0.3rem 0.3rem 0.5rem inset #e6e3df;
 `
 
-export const Decorator = ({ children: BlockContainer }: { children: React.ReactNode }) => {
+export const Decorator = React.memo(({ children: BlockContainer }: { children: React.ReactNode }) => {
   return (
     <Border>
       <GlobalLeftButtons />
@@ -56,4 +56,4 @@ export const Decorator = ({ children: BlockContainer }: { children: React.ReactN
       </div>
     </Border>
   )
-}
+})

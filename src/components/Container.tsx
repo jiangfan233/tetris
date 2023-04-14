@@ -2,7 +2,7 @@
 import styled from "styled-components"
 import { Mesh as MeshConfig } from "../config"
 import { MeshBlocksWrapper } from "./MeshBlocks"
-import React from "react"
+import React, { useCallback, useEffect, useMemo, useRef } from "react"
 import ContinueSvg from "/src/static/play-circle.svg";
 import RestartSvg from "/src/static/arrow-clockwise.svg";
 import { connect } from "react-redux";
@@ -106,14 +106,18 @@ const Button = styled.button.attrs({
 export const Container = ({ dispatch, game, children }: ContainerProps) => {
   const { status } = game!;
 
+  const counter = useRef(0);
+
+  const memoMeshBlocksWrapper = useMemo(() => <MeshBlocksWrapper />, []);
+
   // 继续游戏
-  const handleClickContinue = () => {
+  const handleClickContinue = useCallback(() => {
     const rankData = getStorageItem("rank");
     dispatch!(gameActionCreator(Continue as GameStatus, rankData ? Number(rankData) : undefined));
     clearStorage();
-  }
+  }, []);
 
-  const handleRestart = () => {
+  const handleRestart = useCallback(() => {
     dispatch!(rank.increaseRank(0));
     dispatch!(mesh.resetMesh());
     dispatch!(volume.volumeDo(volume.ResetVolume, 0));
@@ -121,7 +125,7 @@ export const Container = ({ dispatch, game, children }: ContainerProps) => {
     dispatch!(keyboard.blocksDo(Reset));
     dispatch!(gameActionCreator(Start as GameStatus));
     clearStorage();
-  }
+  }, []);
 
   return (
     <StyledContainer>
@@ -136,9 +140,16 @@ export const Container = ({ dispatch, game, children }: ContainerProps) => {
         </Button>
       </Mask>
       {children}
-      <MeshBlocksWrapper />
+      {/* <MeshBlocksWrapper /> */}
+      { memoMeshBlocksWrapper }
     </StyledContainer>
   )
 }
 
-export const GlobalContainer = connect((state: any) => ({ game: state.game }))(Container);
+
+// game 是引用类型，memo 使用的是浅比较
+const MemoContainer = React.memo(Container, (prevProps, nextProps) => {
+  return prevProps.game?.status === nextProps.game?.status;
+})
+
+export const GlobalContainer = connect((state: any) => ({ game: state.game }))(MemoContainer);

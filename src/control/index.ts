@@ -159,7 +159,7 @@ export function runTimer(rank: number) {
 }
 
 
-const liveWindow = debounce(reactiveWindow, 50);
+const liveWindow = debounce(reactiveWindow, 150);
 
 (function init() {
   liveWindow();

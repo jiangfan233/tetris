@@ -3,6 +3,7 @@ import { ShapeConfig, ShapeType } from "./ShapeConfig";
 import { BlockColor, BlockColorMap } from "../config";
 import { connect } from "react-redux";
 import { getPoints } from "../utils";
+import React from "react";
 
 type StyledBlockGroupProps = {
   x: number;
@@ -61,9 +62,10 @@ const StyledBlock = styled.div`
   }
 `;
 
-export const Block = ({ posY, xOffset, yOffset, bgType, value }: BlockProps) => {
+
+export const Block = React.memo(({ posY, xOffset, yOffset, bgType, value }: BlockProps) => {
   return <StyledBlock posY={posY} xOffset={xOffset} yOffset={yOffset} bgType={bgType} value={value}></StyledBlock>;
-};
+});
 
 export const BlockGroup = ({
   dispatch,
